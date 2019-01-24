@@ -13,7 +13,7 @@ import {
     Toast,
     ListItem,
     Right, Radio, Left,DatePicker,
-    
+
 } from 'native-base';
 import AppTemplate from "../appTemplate";
 import ImagePicker from "react-native-image-picker";
@@ -49,7 +49,7 @@ export default class AddLecture extends Component {
             selectedMinutes: 0,
             searchedAdresses: [],
             searchedUsers: [],
-            tableData:[], 
+            tableData:[],
             a:[],
             isStartDateVisible: false,
             isEndDateVisible: false,
@@ -58,7 +58,7 @@ export default class AddLecture extends Component {
             namePhone:[],
             datas: []
         };
-        
+
         // this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}); //autoComplete
     }
 
@@ -88,7 +88,7 @@ export default class AddLecture extends Component {
             end_date: moment(date).format('YYYY-MM-DD')
         })
     };
-    
+
     _handleStartTimePicked = (date) => {
         this.setState({
             isStartTimeVisible: false,
@@ -98,7 +98,7 @@ export default class AddLecture extends Component {
         })
         var now  = this.state.start_date+" "+this.state.start_time;
         var then = this.state.end_date+" "+this.state.end_time;
-        
+
        diffrance = Math.abs( moment(now,"YYYY-MM-DD HH:mm A").diff(moment(then,"YYYY-MM-DD HH:mm A"),'hours',true))
        price = Math.round(diffrance * 10);
        this.setState({price})
@@ -111,7 +111,7 @@ export default class AddLecture extends Component {
         })
         var now  = this.state.start_date+" "+this.state.start_time;
         var then = this.state.end_date+" "+this.state.end_time;
-        
+
        diffrance = Math.abs( moment(now,"YYYY-MM-DD HH:mm A").diff(moment(then,"YYYY-MM-DD HH:mm A"),'hours',true))
        price = Math.round(diffrance * 10);
        this.setState({price})
@@ -134,13 +134,13 @@ export default class AddLecture extends Component {
                 datas: showData
             })
         }).catch(error => {
-           
+
         })
     }
 
     // searchedAdresses = (searchedText) => {
     //     var adresses =  this.state.searchedUsers
-        
+
     //     var searchedAdresses = adresses.filter(function(adress) {
     //         return adress.name.toLowerCase().indexOf(searchedText.toLowerCase()) > -1;
     //     });
@@ -171,7 +171,7 @@ export default class AddLecture extends Component {
         //     //     'name': 'abcsdsdsdd',
         //     //     'mobile': '8858855',
         //     //   }
-            
+
         //     // ]})
         // renderAdress = (adress) => {
         //     return (
@@ -180,7 +180,7 @@ export default class AddLecture extends Component {
         //         </TouchableOpacity>
         //     );
         //     };
-            
+
         // }
 
     //end autoComplete
@@ -219,7 +219,7 @@ export default class AddLecture extends Component {
             isLoading: true
         });
             if(this.state.title == "" || this.state.type_course == "" || this.state.img == "" ||
-            this.state.gender == "" || this.state.allowed == ""  || this.state.start_date == "" || 
+            this.state.gender == "" || this.state.allowed == ""  || this.state.start_date == "" ||
             this.state.end_date == "" || this.state.start_time == "Start Time" || this.state.end_time == " End Time"){
                 Toast.show({
                     text: 'please fill out fields.',
@@ -261,7 +261,7 @@ export default class AddLecture extends Component {
                         //         data.append('price', this.state.price * (timeStart - timeEnd ));
                         //     }else{
                         //         data.append('price', (timeStart - timeEnd ) * 10);
-                        //     }                        
+                        //     }
                         // }else{
                         //     if (this.state.price) {
                         //         data.append('price', this.state.price * (timeEnd - timeStart ));
@@ -269,7 +269,7 @@ export default class AddLecture extends Component {
                         //         data.append('price', (timeEnd - timeStart ) * 10);
                         //     }
                         // }
-    
+
                         // if (this.state.img) {
                         //     data.append('img', {
                         //         name: "img",
@@ -277,7 +277,7 @@ export default class AddLecture extends Component {
                         //         type: 'image/png'
                         //     });
                         // }
-    
+
                         if(this.state.tableData == []){
                             return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
                                 this.setState({
@@ -300,7 +300,7 @@ export default class AddLecture extends Component {
                                     isLoading: false,
                                 });
                             })
-                            
+
                         }else{
                             return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
                                 this.setState({
@@ -326,7 +326,7 @@ export default class AddLecture extends Component {
                                 });
                             })
                         }
-    
+
                     }).then(() => {
                         this.setState({
                             isLoading: false
@@ -347,13 +347,13 @@ export default class AddLecture extends Component {
                 })
             // var timeStart = new Date("01/01/2007 " + this.state.start_duration).getHours() + (new Date("01/01/2007 " + this.state.start_duration).getMinutes()/60);
             // var timeEnd = new Date("01/01/2007 " + this.state.end_duration).getHours()+ (new Date("01/01/2007 " + this.state.end_duration).getMinutes()/60);
-                
+
             }
     }
-    
+
     render() {
         const data = this.state;
-        
+
         return (
             <AppTemplate title="Add lecture" back navigation={this.props.navigation}>
                 <View style={styles.content}>
@@ -368,7 +368,7 @@ export default class AddLecture extends Component {
                                    style={{color: '#9e9797', paddingLeft: 45}}
                             />
                         </Item>
-                        
+
                         <Item style={{height: 90}}>
                             <Icon style={{paddingBottom: 20, paddingTop: 10}} type="Entypo" name='calendar' />
                             <Text style={{paddingBottom: 20, paddingTop: 10}}>From </Text>
@@ -466,11 +466,11 @@ export default class AddLecture extends Component {
 
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>After Attend</Text>
                                 <Radio style={{paddingLeft: 4}} selected={this.state.payment === 2}
-                                    onPress={(payment) => {this.setState({payment: 2})}}/>  
+                                    onPress={(payment) => {this.setState({payment: 2})}}/>
                             </View>
 
                         </Item>
-                        
+
                         <Item style={{height: 70}}>
                             <Icon type="Foundation" name='book' />
                             <Text style={styles.font}>Course Type </Text>
@@ -482,7 +482,7 @@ export default class AddLecture extends Component {
 
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Genral</Text>
                                 <Radio style={{paddingLeft: 8}} selected={this.state.type_course === 2}
-                                    onPress={(type_course) => {this.setState({type_course: 2})}}/>  
+                                    onPress={(type_course) => {this.setState({type_course: 2})}}/>
                             </View>
 
                         </Item>
@@ -501,7 +501,7 @@ export default class AddLecture extends Component {
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Female</Text>
                                 <Radio style={{paddingLeft: 4, paddingRight:3}} selected={this.state.gender === 2}
                                     onPress={(gender) => {this.setState({gender: 2})}}/>
-                                
+
                                 <Icon type="FontAwesome" name='transgender-alt' />
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Both</Text>
                                 <Radio style={{paddingLeft: 4}} selected={this.state.gender === 3}
@@ -531,7 +531,6 @@ export default class AddLecture extends Component {
                             selectText="Add students"
                             searchInputPlaceholderText="Search students..."
                             onChangeInput={ (text)=> console.log(text)}
-                            altFontFamily="ProximaNova-Light"
                             tagRemoveIconColor="#CCC"
                             tagBorderColor="#CCC"
                             tagTextColor="#CCC"
@@ -544,7 +543,7 @@ export default class AddLecture extends Component {
                             submitButtonText="Submit"
                             styles={{backgroundColor: 'red'}}
                         />
-                               
+
                         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
                             <Icon type="MaterialIcons" name='description' />
                             <Text style={styles.font}>Description</Text>
