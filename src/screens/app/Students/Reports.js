@@ -57,6 +57,21 @@ class Reports extends Component {
         })
            
       }
+      
+      componentWillMount() {
+		this.didFocusSubscription = this.props.navigation.addListener(
+			'didFocus',
+			() => {
+				this.Data();
+			}
+		);
+	}
+
+	componentWillUnmount() {
+		// Remove the listener when you are done
+		this.didFocusSubscription.remove();
+	}
+
 
     render() {
         return (

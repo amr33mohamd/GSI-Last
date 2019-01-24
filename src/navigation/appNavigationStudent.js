@@ -66,7 +66,7 @@ const AppStackStudent = createMaterialTopTabNavigator (
                     return <Icon name='news' style={{color: tintColor, fontSize: 30}} type="Entypo" />
                 }
                 else if (routeName === 'SettingsStudentStack') {
-                    return <Icon name='settings' style={{color: tintColor, fontSize: 25}} type="Ionicons" />
+                    return <Icon name='user-circle' style={{color: tintColor, fontSize: 25}} type="FontAwesome" />
                 }
             },
             tabBarLabel: ({ focused, tintColor }) => {
@@ -82,7 +82,7 @@ const AppStackStudent = createMaterialTopTabNavigator (
                       return <Text style={{color: tintColor, fontSize: 12}}>Reports</Text>;
                       break;
                   case 'SettingsStudentStack':
-                    return <Text style={{color: tintColor, fontSize: 12}}>Settings</Text>;
+                    return <Text style={{color: tintColor, fontSize: 12}}>Profile</Text>;
                     break;
         
         

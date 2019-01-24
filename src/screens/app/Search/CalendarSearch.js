@@ -144,7 +144,16 @@ export default class CalendarSearch extends Component {
                 // specify how each item should be rendered in agenda
                 renderItem={this.renderItem.bind(this)}
                 // specify how each date should be rendered. day can be undefined if the item is not first in that day.
-                renderDay={(day, item) => {return (<Text style={styles.dateStyle}>{day ?day.day:null}</Text>);}}
+                renderDay={(day, item) => {return (
+                <View>
+                <Text style={styles.dateStyle}>
+                {day ?day.day:null}
+                </Text>
+                <Text style={styles.dateShowStyle}>
+                {day ? (moment(day.dateString, "YYYY-MM-DD").format('dddd')).substr(0,3):null}
+                </Text>
+                </View>
+                );}}
                 // specify how empty date content with no items should be rendered
                 renderEmptyDate={() => {return (<Text>This is empty date!</Text>);}}
                 // specify how agenda knob should look like
@@ -214,8 +223,14 @@ const styles = StyleSheet.create({
     },
     dateStyle:{
         fontSize: 25,
-        padding: 10,
+        paddingTop: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
         fontFamily: "Roboto",
+    },
+    dateShowStyle:{
+        paddingLeft: 5,
+        fontSize: 17
     },
     itemTxt:{
         fontSize: 17,

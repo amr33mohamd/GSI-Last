@@ -63,7 +63,7 @@ const AppStackTeacher = createMaterialTopTabNavigator (
                     return <Icon name='cash-multiple' style={{color: tintColor, fontSize: 26}} type="MaterialCommunityIcons" />
                 }
                 else if (routeName === 'SettingsTeacherStack') {
-                    return <Icon name='settings' style={{color: tintColor, fontSize: 26}} type="MaterialIcons" />
+                    return <Icon name='user-circle' style={{color: tintColor, fontSize: 26}} type="FontAwesome" />
                 }
             },
             tabBarLabel: ({ focused, tintColor }) => {
@@ -79,7 +79,7 @@ const AppStackTeacher = createMaterialTopTabNavigator (
                       return <Text style={{color: tintColor, fontSize: 14}}>Payment</Text>;
                       break;
                   case 'SettingsTeacherStack':
-                    return <Text style={{color: tintColor, fontSize: 14}}>Settings</Text>;
+                    return <Text style={{color: tintColor, fontSize: 14}}>Profile</Text>;
                     break;
         
         

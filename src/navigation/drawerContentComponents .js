@@ -54,7 +54,7 @@ class drawerContentComponents extends Component {
                     <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('ProfileInfoStudent')}>
+                <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('SettingsStudentStack')}>
                     <Image source={require('../images/No-headshot.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Profile</Text>
                     <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
