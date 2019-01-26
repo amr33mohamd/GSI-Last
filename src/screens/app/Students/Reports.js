@@ -134,14 +134,14 @@ class Reports extends Component {
 
                         <View style={styles.Box1}>
 
-                            <Item style={styles.item}>
+                            <Item style={styles.item} onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
                                 <View style={styles.viewImage}>
                                     <Image source={{uri: item.img}} style={styles.image}/>
                                 </View>
                                 <View>
                                     <View style={{flexDirection: 'row', paddingBottom: 7}}>
                                         <Icon type="FontAwesome" name="user" />
-                                        <Text>{item.user.name}</Text>
+                                        <Text>{item.user.name} {item.user.middleName} {item.user.lastName}</Text>
                                     </View>
 
                                     <View style={{flexDirection: 'row', paddingBottom: 7}}>

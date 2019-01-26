@@ -49,23 +49,22 @@ class Payments extends Component {
     render() {
         return (
             <AppTemplate title="Payment" navigation={this.props.navigation}>
-                {
-                    (this.props.user.lecture.length == 0)?null:
-                    (
-                        <Button
-                        onPress={()=> Linking.openURL(this.state.url)}
-                        style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
-    
-                        <Text style={{flex: 1, paddingLeft: 10}}> Report Lectures </Text>
-                        {this.state.isApplying && (
-                            <ActivityIndicator size="small" color="#000000" />
-                        )}
-    
-                        <Icon type="Entypo" name="news" style={{color: Color.mainColor, fontSize: 20}}/>
-    
-                        </Button>
-                    )
-                }
+
+                {/* (this.props.user.lecture.length == 0)?null: */}
+                    
+                <Button
+                onPress={()=> Linking.openURL(this.state.url)}
+                style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
+
+                <Text style={{flex: 1, paddingLeft: 10}}> Report Lectures </Text>
+                {this.state.isApplying && (
+                    <ActivityIndicator size="small" color="#000000" />
+                )}
+
+                <Icon type="Entypo" name="news" style={{color: Color.mainColor, fontSize: 20}}/>
+
+                </Button>
+
                 <View style={styles.content}>
                 {
                     (this.state.isLoading)? (

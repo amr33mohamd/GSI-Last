@@ -60,6 +60,12 @@ class drawerContentComponents extends Component {
                     <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('WalletStudent')}>
+                    <Image source={require('../images/wallet.png')} style={{width: 25, height: 25, marginRight: 20}} />
+                    <Text>Wallet</Text>
+                    <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.screenStyle} onPress={() => this.logout()}>
                     <Image source={require('../images/logout.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Logout</Text>

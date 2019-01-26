@@ -5,6 +5,7 @@ import Notifications from "../screens/app/Notifications";
 import ResultSearch from "../screens/app/Search/ResultSearch";
 import CalendarSearch from "../screens/app/Search/CalendarSearch";
 import SettingsStudent from "../screens/app/Students/SettingsStudent";
+import WalletStudent from "../screens/app/Students/WalletStudent";
 import ProfileInfoStudent from "../screens/app/Students/ProfileInfoStudent";
 import Reports from "../screens/app/Students/Reports";
 import LectureStudent from "../screens/app/Lectures";
@@ -33,6 +34,8 @@ const NotificationsStack = createStackNavigator({
 
 const ReportsStack = createStackNavigator({
     Reports,
+    LectureStudent,
+    WalletStudent,
     Search
 },{
     headerMode: 'none',

@@ -68,47 +68,56 @@ class SettingsTeacher extends Component {
     }
 
     changePassword(){
-        this.setState({
-            isLoadingPassword: true,
-        });
-            if(this.state.oldPassword == '' || this.state.newpassword == ''){
-                Toast.show({
-                    text: "Please fill out fields.",
-                    buttonText: "Ok",
-                    type: "danger"
-                })
-                this.setState({
-                    isLoadingPassword: false,
-                });
-            }else{
-                return AsyncStorage.getItem('token').then(userToken => {
-                    return axios.post(Server.url+'api/auth/updatepassword?token='+userToken,{
-                        oldPassword: this.state.oldPassword,
-                        newpassword: this.state.newpassword
-                    }).then(response => {
-                        this.setState({
-                            isLoadingPassword: false,
-                        });
-                        Toast.show({
-                            text: 'Successfully add new password',
-                            type: "success",
-                            buttonText: 'Okay'
-                        });
-                    }).catch(error => {
-                        this.setState({
-                            isLoadingPassword: false,
-                        });
-                        alert(JSON.stringify(error));
-                        Toast.show({
-                            text: "Password does not match.",
-                            buttonText: "Ok",
-                            type: "danger"
+        if(this.state.oldPassword > 6){
+            let text= 'password at least 6 characters';
+            Toast.show({
+                text,
+                type: 'danger',
+                buttonText: 'Okay'
+            });
+        }else{
+            this.setState({
+                isLoadingPassword: true,
+            });
+                if(this.state.oldPassword == '' || this.state.newpassword == ''){
+                    Toast.show({
+                        text: "Please fill out fields.",
+                        buttonText: "Ok",
+                        type: "danger"
+                    })
+                    this.setState({
+                        isLoadingPassword: false,
+                    });
+                }else{
+                    return AsyncStorage.getItem('token').then(userToken => {
+                        return axios.post(Server.url+'api/auth/updatepassword?token='+userToken,{
+                            oldPassword: this.state.oldPassword,
+                            newpassword: this.state.newpassword
+                        }).then(response => {
+                            this.setState({
+                                isLoadingPassword: false,
+                            });
+                            Toast.show({
+                                text: 'Successfully add new password',
+                                type: "success",
+                                buttonText: 'Okay'
+                            });
+                        }).catch(error => {
+                            this.setState({
+                                isLoadingPassword: false,
+                            });
+                            alert(JSON.stringify(error));
+                            Toast.show({
+                                text: "Password does not match.",
+                                buttonText: "Ok",
+                                type: "danger"
+                            })
                         })
                     })
-                })
-
+    
+                }
             }
-      }
+        }
 
       changeImg(){
         let options = {
@@ -209,7 +218,7 @@ class SettingsTeacher extends Component {
                             <Text style={styles.font}>Email </Text>
                             <Input onChangeText={(email) => this.setState({email})}
                                     value={this.state.email}
-                                    style={{color: '#9e9797', paddingLeft: 55}}
+                                    style={{color: '#9e9797', paddingLeft: 40}}
                             />
                         </Item>
 
