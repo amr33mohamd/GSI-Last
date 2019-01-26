@@ -13,7 +13,7 @@ import {
     Toast,
     ListItem,
     Right, Radio, Left,DatePicker,
-    
+
 } from 'native-base';
 import AppTemplate from "../appTemplate";
 import ImagePicker from "react-native-image-picker";
@@ -51,7 +51,7 @@ class AddLecture extends Component {
             selectedMinutes: 0,
             searchedAdresses: [],
             searchedUsers: [],
-            tableData:[], 
+            tableData:[],
             a:[],
             isStartDateVisible: false,
             isEndDateVisible: false,
@@ -60,7 +60,7 @@ class AddLecture extends Component {
             namePhone:[],
             datas: []
         };
-        
+
         // this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}); //autoComplete
     }
 
@@ -90,7 +90,7 @@ class AddLecture extends Component {
             end_date: moment(date).format('YYYY-MM-DD')
         })
     };
-    
+
     _handleStartTimePicked = (date) => {
         this.setState({
             isStartTimeVisible: false,
@@ -100,7 +100,7 @@ class AddLecture extends Component {
         })
         var now  = this.state.start_date+" "+this.state.start_time;
         var then = this.state.end_date+" "+this.state.end_time;
-        
+
        diffrance = Math.abs( moment(now,"YYYY-MM-DD HH:mm A").diff(moment(then,"YYYY-MM-DD HH:mm A"),'hours',true))
        price = Math.round(diffrance * 10);
        this.setState({price})
@@ -113,7 +113,7 @@ class AddLecture extends Component {
         })
         var now  = this.state.start_date+" "+this.state.start_time;
         var then = this.state.end_date+" "+this.state.end_time;
-        
+
        diffrance = Math.abs( moment(now,"YYYY-MM-DD HH:mm A").diff(moment(then,"YYYY-MM-DD HH:mm A"),'hours',true))
        price = Math.round(diffrance * 10);
        this.setState({price})
@@ -136,13 +136,13 @@ class AddLecture extends Component {
                 datas: showData
             })
         }).catch(error => {
-           
+
         })
     }
 
     // searchedAdresses = (searchedText) => {
     //     var adresses =  this.state.searchedUsers
-        
+
     //     var searchedAdresses = adresses.filter(function(adress) {
     //         return adress.name.toLowerCase().indexOf(searchedText.toLowerCase()) > -1;
     //     });
@@ -173,7 +173,7 @@ class AddLecture extends Component {
         //     //     'name': 'abcsdsdsdd',
         //     //     'mobile': '8858855',
         //     //   }
-            
+
         //     // ]})
         // renderAdress = (adress) => {
         //     return (
@@ -182,7 +182,7 @@ class AddLecture extends Component {
         //         </TouchableOpacity>
         //     );
         //     };
-            
+
         // }
 
     //end autoComplete
@@ -217,6 +217,30 @@ class AddLecture extends Component {
     }
 
     addLecture(){
+<<<<<<< HEAD
+=======
+        this.setState({
+            isLoading: true
+        });
+            if(this.state.title == "" || this.state.type_course == "" || this.state.img == "" ||
+            this.state.gender == "" || this.state.allowed == ""  || this.state.start_date == "" ||
+            this.state.end_date == "" || this.state.start_time == "Start Time" || this.state.end_time == " End Time"){
+                Toast.show({
+                    text: 'please fill out fields.',
+                    type: "danger",
+                    buttonText: 'Okay'
+                });
+                this.setState({
+                    isLoading: false
+                });
+            }else{
+                var c = '/LectureImage/'+'_' + Math.random().toString(36).substr(2, 9);
+                firebase.storage()
+                .ref(c)
+                .putFile(this.state.img)
+                .then(snapshot => {
+                    firebase.storage().ref(c).getDownloadURL().then(url => {
+>>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
 
         if(this.state.img == ''){
             
@@ -254,7 +278,33 @@ class AddLecture extends Component {
                         data.append('end_date', this.state.end_date);
                         data.append('start_time', this.state.start_time);
                         data.append('end_time', this.state.end_time);
+<<<<<<< HEAD
         
+=======
+                        data.append('img', url);
+                        // if(timeStart>timeEnd){
+                        //     if (this.state.price) {
+                        //         data.append('price', this.state.price * (timeStart - timeEnd ));
+                        //     }else{
+                        //         data.append('price', (timeStart - timeEnd ) * 10);
+                        //     }
+                        // }else{
+                        //     if (this.state.price) {
+                        //         data.append('price', this.state.price * (timeEnd - timeStart ));
+                        //     }else{
+                        //         data.append('price', (timeEnd - timeStart ) * 10);
+                        //     }
+                        // }
+
+                        // if (this.state.img) {
+                        //     data.append('img', {
+                        //         name: "img",
+                        //         uri: this.state.img,
+                        //         type: 'image/png'
+                        //     });
+                        // }
+
+>>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
                         if(this.state.tableData == []){
                             return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
                                 this.setState({
@@ -277,7 +327,7 @@ class AddLecture extends Component {
                                     isLoading: false,
                                 });
                             })
-                            
+
                         }else{
                             return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
                                 this.setState({
@@ -310,7 +360,11 @@ class AddLecture extends Component {
                                 });
                             })
                         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
                     }).then(() => {
                         this.setState({
                             isLoading: false
@@ -454,17 +508,25 @@ class AddLecture extends Component {
                             type: "danger"
                         })
                     })
+<<<<<<< HEAD
                 // var timeStart = new Date("01/01/2007 " + this.state.start_duration).getHours() + (new Date("01/01/2007 " + this.state.start_duration).getMinutes()/60);
                 // var timeEnd = new Date("01/01/2007 " + this.state.end_duration).getHours()+ (new Date("01/01/2007 " + this.state.end_duration).getMinutes()/60);
                     
                 }
         }
         
+=======
+                })
+            // var timeStart = new Date("01/01/2007 " + this.state.start_duration).getHours() + (new Date("01/01/2007 " + this.state.start_duration).getMinutes()/60);
+            // var timeEnd = new Date("01/01/2007 " + this.state.end_duration).getHours()+ (new Date("01/01/2007 " + this.state.end_duration).getMinutes()/60);
+
+            }
+>>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
     }
-    
+
     render() {
         const data = this.state;
-        
+
         return (
             <AppTemplate title="Add lecture" back navigation={this.props.navigation}>
                 <View style={styles.content}>
@@ -479,7 +541,7 @@ class AddLecture extends Component {
                                    style={{color: '#9e9797', paddingLeft: 45}}
                             />
                         </Item>
-                        
+
                         <Item style={{height: 90}}>
                             <Icon style={{paddingBottom: 20, paddingTop: 10}} type="Entypo" name='calendar' />
                             <Text style={{paddingBottom: 20, paddingTop: 10}}>From </Text>
@@ -577,11 +639,11 @@ class AddLecture extends Component {
 
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>After Attend</Text>
                                 <Radio style={{paddingLeft: 4}} selected={this.state.payment === 2}
-                                    onPress={(payment) => {this.setState({payment: 2})}}/>  
+                                    onPress={(payment) => {this.setState({payment: 2})}}/>
                             </View>
 
                         </Item>
-                        
+
                         <Item style={{height: 70}}>
                             <Icon type="Foundation" name='book' />
                             <Text style={styles.font}>Course Type </Text>
@@ -593,7 +655,7 @@ class AddLecture extends Component {
 
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Genral</Text>
                                 <Radio style={{paddingLeft: 8}} selected={this.state.type_course === 2}
-                                    onPress={(type_course) => {this.setState({type_course: 2})}}/>  
+                                    onPress={(type_course) => {this.setState({type_course: 2})}}/>
                             </View>
 
                         </Item>
@@ -612,7 +674,7 @@ class AddLecture extends Component {
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Female</Text>
                                 <Radio style={{paddingLeft: 4, paddingRight:3}} selected={this.state.gender === 2}
                                     onPress={(gender) => {this.setState({gender: 2})}}/>
-                                
+
                                 <Icon type="FontAwesome" name='transgender-alt' />
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Both</Text>
                                 <Radio style={{paddingLeft: 4}} selected={this.state.gender === 3}
@@ -642,7 +704,6 @@ class AddLecture extends Component {
                             selectText="Add students"
                             searchInputPlaceholderText="Search students..."
                             onChangeInput={ (text)=> console.log(text)}
-                            altFontFamily="ProximaNova-Light"
                             tagRemoveIconColor="#CCC"
                             tagBorderColor="#CCC"
                             tagTextColor="#CCC"
@@ -656,8 +717,11 @@ class AddLecture extends Component {
                             styles={{backgroundColor: 'red'}}
                         />
 
+<<<<<<< HEAD
                         <Text>{this.state.tableData}</Text>
                                
+=======
+>>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
                         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
                             <Icon type="MaterialIcons" name='description' />
                             <Text style={styles.font}>Description</Text>

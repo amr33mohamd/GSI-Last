@@ -15,7 +15,7 @@ class drawerContentComponents extends Component {
         });
         this.props.navigation.dispatch(navigateAction);
     })
-    
+
     logout(){
         return AsyncStorage.removeItem('token').then(()=>{
             this.props.navigation.navigate('Auth');
@@ -60,9 +60,15 @@ class drawerContentComponents extends Component {
                     <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 
+<<<<<<< HEAD
                 <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('WalletStudent')}>
                     <Image source={require('../images/wallet.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Wallet</Text>
+=======
+                <TouchableOpacity style={styles.screenStyle} onPress={() => this.props.navigation.navigate('Course')}>
+                    <Icon name = 'teach' type = 'MaterialCommunityIcons' style={{width: 25, height: 25, marginRight: 20}} />
+                    <Text>Register Course</Text>
+>>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
                     <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 
@@ -71,10 +77,10 @@ class drawerContentComponents extends Component {
                     <Text>Logout</Text>
                     <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
-                
+
             </View>
         </View>
-    
+
     )
   }
 }

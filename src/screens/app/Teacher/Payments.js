@@ -49,6 +49,7 @@ class Payments extends Component {
     render() {
         return (
             <AppTemplate title="Payment" navigation={this.props.navigation}>
+<<<<<<< HEAD
 
                 {/* (this.props.user.lecture.length == 0)?null: */}
                     
@@ -65,6 +66,25 @@ class Payments extends Component {
 
                 </Button>
 
+=======
+                {
+                    (this.props.user.lecture.length == 0)?null:
+                    (
+                        <Button
+                        onPress={()=> Linking.openURL(this.state.url)}
+                        style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
+
+                        <Text style={{flex: 1, paddingLeft: 10}}> Report Lectures </Text>
+                        {this.state.isApplying && (
+                            <ActivityIndicator size="small" color="#000000" />
+                        )}
+
+                        <Icon type="Entypo" name="news" style={{color: Color.mainColor, fontSize: 20}}/>
+
+                        </Button>
+                    )
+                }
+>>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
                 <View style={styles.content}>
                 {
                     (this.state.isLoading)? (
@@ -95,7 +115,7 @@ class Payments extends Component {
                                             <Text style={styles.font}>Students </Text>
                                             <Text style={{marginLeft: 60}}>{item.joint_users.length}</Text>
                                         </Item>
-                                        
+
                                         <Item style={{ backgroundColor: '#fff', borderColor: 'transparent', paddingBottom: 10 }}>
                                             <Icon type="FontAwesome" name="hourglass-start" />
                                             <Text> {item.start_duration}</Text>
@@ -109,17 +129,17 @@ class Payments extends Component {
                                         <Button style={styles.button} onPress={()=> this.props.navigation.navigate('LecturePayment', {...item})}>
                                             <Text style={styles.buttonTxt}>View Student's Track</Text>
                                         </Button>
-                                        
+
                                         {/* <FlatList
                                         data={item.joint_users}
                                         renderItem={(student) => (
 
-                                                <Button style={styles.button} onPress={()=> this.props.navigation.navigate('LecturePayment', 
+                                                <Button style={styles.button} onPress={()=> this.props.navigation.navigate('LecturePayment',
                                                 {...student.item, user_name: student.item.name, user_amount: student.item.pivot.amount, lecture_price: item.price})}>
                                                     <Text style={styles.buttonTxt}>View Student's Track</Text>
                                                 </Button>
 
-                                            
+
                                         )}
                                         keyExtractor = { (item, index) => index.toString() }
                                         /> */}
@@ -146,15 +166,15 @@ const styles = StyleSheet.create({
         padding:7,
     },
     Box: {
-        height: 220, 
+        height: 220,
         backgroundColor: '#fff',
         flexDirection: 'row',
         marginBottom: 30
     },
     firstBox:{
-        width: 30, 
-        height: 220, 
-        backgroundColor: Color.firstColor, 
+        width: 30,
+        height: 220,
+        backgroundColor: Color.firstColor,
     },
     secondBox:{
         padding: 20
@@ -164,7 +184,6 @@ const styles = StyleSheet.create({
         borderColor: 'transparent'
     },
     font:{
-        fontFamily: "Open Sans",
         fontSize: 21,
         color:'#000'
     },
@@ -172,8 +191,8 @@ const styles = StyleSheet.create({
         paddingRight: 25
     },
     image:{
-        width: 100, 
-        height: 100,    
+        width: 100,
+        height: 100,
     },
     button:{
         backgroundColor: '#fef5e5',

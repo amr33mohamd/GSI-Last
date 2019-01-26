@@ -10,6 +10,7 @@ import AppStackStudent from './appNavigationStudent'
 import AppStackTeacher from './appNavigationTeacher'
 import TeacherDrawer from './DrawerNavigatorTeacher'
 import DrawerNavigator from './DrawerNavigator'
+import Course from "../screens/app/Students/Course";
 
 const RootStack= createSwitchNavigator(
     {
@@ -17,6 +18,7 @@ const RootStack= createSwitchNavigator(
         AppStudent: DrawerNavigator,
         AppTeacher: TeacherDrawer,
         Auth: AuthStack,
+
     },
 );
 

@@ -12,6 +12,8 @@ import LectureStudent from "../screens/app/Lectures";
 import WeebView from "../screens/app/Lectures/WebView";
 import Color from "../constants/colors";
 import Search from "../screens/app/Search";
+import Course from "../screens/app/Students/Course";
+
 import { createMaterialTopTabNavigator, createStackNavigator, DrawerNavigator } from 'react-navigation'
 
 const StudentStack = createStackNavigator({
@@ -19,8 +21,10 @@ const StudentStack = createStackNavigator({
     ResultSearch,
     LectureStudent,
     WeebView,
-    Search
-},{
+    Search,
+    Course
+
+  },{
     headerMode: 'none',
 });
 
@@ -34,9 +38,15 @@ const NotificationsStack = createStackNavigator({
 
 const ReportsStack = createStackNavigator({
     Reports,
+<<<<<<< HEAD
     LectureStudent,
     WalletStudent,
     Search
+=======
+    Search,
+
+
+>>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
 },{
     headerMode: 'none',
 });
@@ -53,7 +63,7 @@ const AppStackStudent = createMaterialTopTabNavigator (
         StudentStack,
         NotificationsStack,
         ReportsStack,
-        SettingsStudentStack
+        SettingsStudentStack,
     },
     {
         navigationOptions: ({ navigation }) => ({
@@ -87,8 +97,8 @@ const AppStackStudent = createMaterialTopTabNavigator (
                   case 'SettingsStudentStack':
                     return <Text style={{color: tintColor, fontSize: 12}}>Profile</Text>;
                     break;
-        
-        
+
+
                 }
             }
         }),
