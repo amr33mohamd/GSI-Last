@@ -217,30 +217,6 @@ class AddLecture extends Component {
     }
 
     addLecture(){
-<<<<<<< HEAD
-=======
-        this.setState({
-            isLoading: true
-        });
-            if(this.state.title == "" || this.state.type_course == "" || this.state.img == "" ||
-            this.state.gender == "" || this.state.allowed == ""  || this.state.start_date == "" ||
-            this.state.end_date == "" || this.state.start_time == "Start Time" || this.state.end_time == " End Time"){
-                Toast.show({
-                    text: 'please fill out fields.',
-                    type: "danger",
-                    buttonText: 'Okay'
-                });
-                this.setState({
-                    isLoading: false
-                });
-            }else{
-                var c = '/LectureImage/'+'_' + Math.random().toString(36).substr(2, 9);
-                firebase.storage()
-                .ref(c)
-                .putFile(this.state.img)
-                .then(snapshot => {
-                    firebase.storage().ref(c).getDownloadURL().then(url => {
->>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
 
         if(this.state.img == ''){
             
@@ -278,33 +254,7 @@ class AddLecture extends Component {
                         data.append('end_date', this.state.end_date);
                         data.append('start_time', this.state.start_time);
                         data.append('end_time', this.state.end_time);
-<<<<<<< HEAD
         
-=======
-                        data.append('img', url);
-                        // if(timeStart>timeEnd){
-                        //     if (this.state.price) {
-                        //         data.append('price', this.state.price * (timeStart - timeEnd ));
-                        //     }else{
-                        //         data.append('price', (timeStart - timeEnd ) * 10);
-                        //     }
-                        // }else{
-                        //     if (this.state.price) {
-                        //         data.append('price', this.state.price * (timeEnd - timeStart ));
-                        //     }else{
-                        //         data.append('price', (timeEnd - timeStart ) * 10);
-                        //     }
-                        // }
-
-                        // if (this.state.img) {
-                        //     data.append('img', {
-                        //         name: "img",
-                        //         uri: this.state.img,
-                        //         type: 'image/png'
-                        //     });
-                        // }
-
->>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
                         if(this.state.tableData == []){
                             return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
                                 this.setState({
@@ -360,11 +310,7 @@ class AddLecture extends Component {
                                 });
                             })
                         }
-<<<<<<< HEAD
         
-=======
-
->>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
                     }).then(() => {
                         this.setState({
                             isLoading: false
@@ -508,20 +454,12 @@ class AddLecture extends Component {
                             type: "danger"
                         })
                     })
-<<<<<<< HEAD
                 // var timeStart = new Date("01/01/2007 " + this.state.start_duration).getHours() + (new Date("01/01/2007 " + this.state.start_duration).getMinutes()/60);
                 // var timeEnd = new Date("01/01/2007 " + this.state.end_duration).getHours()+ (new Date("01/01/2007 " + this.state.end_duration).getMinutes()/60);
                     
                 }
         }
         
-=======
-                })
-            // var timeStart = new Date("01/01/2007 " + this.state.start_duration).getHours() + (new Date("01/01/2007 " + this.state.start_duration).getMinutes()/60);
-            // var timeEnd = new Date("01/01/2007 " + this.state.end_duration).getHours()+ (new Date("01/01/2007 " + this.state.end_duration).getMinutes()/60);
-
-            }
->>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
     }
 
     render() {
@@ -717,11 +655,8 @@ class AddLecture extends Component {
                             styles={{backgroundColor: 'red'}}
                         />
 
-<<<<<<< HEAD
                         <Text>{this.state.tableData}</Text>
                                
-=======
->>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
                         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
                             <Icon type="MaterialIcons" name='description' />
                             <Text style={styles.font}>Description</Text>

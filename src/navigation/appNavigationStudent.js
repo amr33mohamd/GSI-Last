@@ -38,15 +38,9 @@ const NotificationsStack = createStackNavigator({
 
 const ReportsStack = createStackNavigator({
     Reports,
-<<<<<<< HEAD
     LectureStudent,
     WalletStudent,
     Search
-=======
-    Search,
-
-
->>>>>>> a578b130b9a5dae61d0aa9d43e262319f803e024
 },{
     headerMode: 'none',
 });
