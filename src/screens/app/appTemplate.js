@@ -66,7 +66,7 @@ class AppTemplate extends Component {
                     </Left>
 
                     <Body>
-                        <Title>{this.props.title}</Title>
+                        <Title style={{color:'white'}}>{this.props.title}</Title>
                     </Body>
 
                     <Right>

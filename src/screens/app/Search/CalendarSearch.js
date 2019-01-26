@@ -111,7 +111,7 @@ export default class CalendarSearch extends Component {
                     </Left>
 
                     <Body>
-                        <Title>Home</Title>
+                        <Title style={{color:'white'}}>Home</Title>
                     </Body>
 
                     <Right>
@@ -146,7 +146,7 @@ export default class CalendarSearch extends Component {
                 renderItem={this.renderItem.bind(this)}
                 // specify how each date should be rendered. day can be undefined if the item is not first in that day.
                 renderDay={(day, item) => {return (
-                <View>
+                <View style={{justifyContent:'center',alignItems:'center',width:50}}>
                 <Text style={styles.dateStyle}>
                 {day ?day.day:null}
                 </Text>
@@ -189,7 +189,7 @@ export default class CalendarSearch extends Component {
 
     renderItem(item) {
         return (
-            <TouchableOpacity style={[styles.item, {height:90}]}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
+            <TouchableOpacity style={[styles.item, {height:90,borderBottomColor:'orange',borderBottomWidth:1}]}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
                 <Text style={styles.itemTxt}>Title: {item.title}</Text>
                 <Text style={styles.itemTxt}>Teacher: {item.user.name}</Text>
                 <Text style={styles.itemTxtDate}>{item.start_time} To {item.end_time}</Text>

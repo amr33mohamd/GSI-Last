@@ -20,8 +20,11 @@ class Course extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          mile:0,
+          mile:1,
           selectedItems: [],
+          price:0,
+          pay:0,
+          courses:'',
           items:[{
     id: '92iijs7yta',
     name: 'Ondo',
@@ -75,17 +78,50 @@ class Course extends Component {
     //         });
     //     });
     // }
-
+JoinCourse = ()=>{
+  this.props.navigation.navigate('WebViewCourse',{amount:this.state.pay,courses:this.state.courses,installment:this.state.mile,total_amount:this.state.price})
+}
     onSelectedItemsChange = selectedItems => {
       this.setState({ selectedItems });
-      alert(JSON.stringify(selectedItems))
+      var courses = '';
+      selectedItems.map((data,index)=>{
+        if(index == selectedItems.length-1){
+          courses += ''+data;
+          this.setState({courses})
+          axios.post(Server.url + 'api/courses/calculate',{courses})
+              .then(response => {
+                this.setState({price:response.data,pay:response.data})
+              }).catch(error => {
+              Toast.show({
+                  text: 'Error reaching the server.',
+                  type: "danger",
+                  buttonText: 'Okay'
+              });
+          })
+        }
+        else {
+          courses += ''+data+',';
+        }
+      })
     };
+    componentDidMount(){
+      axios.get(Server.url + 'api/courses')
+          .then(response => {
+            this.setState({items:response.data})
+          }).catch(error => {
+          Toast.show({
+              text: 'Error reaching the server.',
+              type: "danger",
+              buttonText: 'Okay'
+          });
+      })
+    }
 
 
     render() {
       const tableHead = ['Type', 'Value'];
       		const tableData = [
-      			['Price' , '100'],
+      			['Pay Now' , this.state.pay],
 
       		];
         return (
@@ -118,30 +154,59 @@ class Course extends Component {
                         />
                     <View >
                     <Text style={{textAlign:'center',padding:10}}>installment</Text>
-                    <TouchableOpacity style={{flexDirection:'row',padding:15}} onPress={()=>{this.setState({mile:1})}}>
+
+
+
+                    <TouchableOpacity style={{flexDirection:'row',padding:15}} onPress={()=>{
+                      price = this.state.price;
+                      this.setState({mile:1,pay:price})}}>
             <Left>
-              <Text>One</Text>
+              <Text>One - {this.state.price} KWD</Text>
             </Left>
             <Right>
-              <Radio onPress={()=>{this.setState({mile:1})}}  selected={this.state.mile === 1} />
+              <Radio onPress={()=>{
+                price = this.state.price;
+                this.setState({mile:1,pay:price})}}  selected={this.state.mile === 1} />
             </Right>
           </TouchableOpacity>
-          <TouchableOpacity style={{flexDirection:'row',padding:15}} onPress={()=>{this.setState({mile:2})}}>
+
+
+          <TouchableOpacity style={{flexDirection:'row',padding:15}} onPress={()=>{
+            var price = this.state.price;
+            var pay = (price+10)/2
+            this.setState({mile:2,pay})}}>
 
             <Left>
-              <Text>Two</Text>
+              <Text>Two - {this.state.price+10 } KWD</Text>
             </Left>
             <Right>
-              <Radio onPress={()=>{this.setState({mile:2})}}  selected={this.state.mile === 2} />
+              <Radio onPress={()=>{
+                var price = this.state.price;
+                var pay = (price+10)/2
+                this.setState({mile:2})
+
+            }}  selected={this.state.mile === 2} />
             </Right>
           </TouchableOpacity>
-          <TouchableOpacity style={{flexDirection:'row',padding:15}} onPress={()=>{this.setState({mile:3})}}>
+
+
+          <TouchableOpacity style={{flexDirection:'row',padding:15}} onPress={()=>{
+            var price = this.state.price;
+            var pay = Math.round((price+15)/3)
+            this.setState({mile:3,pay})
+
+        }}>
 
             <Left>
-              <Text>Three</Text>
+              <Text>Three - {this.state.price+15 } KWD</Text>
             </Left>
             <Right>
-              <Radio onPress={()=>{this.setState({mile:3})}}  selected={this.state.mile === 3} />
+              <Radio onPress={()=>{
+                var price = this.state.price;
+                var pay = (price+15)/3
+                this.setState({mile:3})
+
+            }}   selected={this.state.mile === 3} />
             </Right>
           </TouchableOpacity>
           </View>
@@ -173,7 +238,7 @@ class Course extends Component {
 
 
                     <Button
-                        onPress={() => this.Editprofile()}
+                        onPress={() => this.JoinCourse()}
                         style={{flexDirection: "row", backgroundColor: '#d3d3ea',margin:10}}
                         block
                     >

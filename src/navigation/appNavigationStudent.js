@@ -12,6 +12,7 @@ import WeebView from "../screens/app/Lectures/WebView";
 import Color from "../constants/colors";
 import Search from "../screens/app/Search";
 import Course from "../screens/app/Students/Course";
+import WebViewCourse from "../screens/app/Lectures/WebViewCourse";
 
 import { createMaterialTopTabNavigator, createStackNavigator, DrawerNavigator } from 'react-navigation'
 
@@ -21,8 +22,8 @@ const StudentStack = createStackNavigator({
     LectureStudent,
     WeebView,
     Search,
-    Course
-
+    Course,
+WebViewCourse
   },{
     headerMode: 'none',
 });
