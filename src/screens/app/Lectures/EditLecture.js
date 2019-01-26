@@ -26,8 +26,10 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment'
 import Color from '../../../constants/colors';
 import firebase from 'react-native-firebase';
+import {setUser} from "../../../reducers";
+import {connect} from "react-redux";
 
-export default class EditLecture extends Component {
+class EditLecture extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -48,9 +50,16 @@ export default class EditLecture extends Component {
             isEndDateVisible: false,
             isStartTimeVisible: false,
             isEndTimeVisible: false,
-            isLoading: false
+            isLoading: false,
+            datas: [],
+            searchedUsers: [],
+            tableData:[],
         };
     }
+
+    onSelectedItemsChange = tableData => {
+        this.setState({ tableData });
+    };
 
     // Start timePicker
     _showStartDatePicker = () => this.setState({ isStartDateVisible: true });
@@ -67,6 +76,7 @@ export default class EditLecture extends Component {
         this.setState({
             isStartDateVisible: false,
             start_date: moment(date).format('YYYY-MM-DD'),
+            end_date: moment(date).format('YYYY-MM-DD')
             // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
         })
     };
@@ -82,6 +92,7 @@ export default class EditLecture extends Component {
         this.setState({
             isStartTimeVisible: false,
             start_time: moment(date).format('h:mm a'),
+            end_time: moment(date).add(2, 'hours').format('h:mm a')
             // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
         })
     };
@@ -128,30 +139,49 @@ export default class EditLecture extends Component {
         this.setState({
             isLoading: true
         });
-        firebase.storage()
-        .ref('/LectureImage/'+'_' + Math.random().toString(36).substr(2, 9))
-        .putFile(this.state.img)
-        .then(snapshot => {
-            firebase.storage().ref('/LectureImage').getDownloadURL().then(url => {
-                AsyncStorage.getItem('token').then(userToken => {
-                    let data = new FormData();
-                    start_duration = this.state.start_date+" "+this.state.start_time;
-                    end_duration = this.state.end_date+" "+this.state.end_time;
-                    data.append('title', this.state.title);
-                    data.append('price', this.state.price);
-                    data.append('end_date', this.state.end_date);
-                    data.append('start_duration', start_duration);
-                    data.append('end_duration', end_duration);
-                    data.append('payment', this.state.payment);
-                    data.append('type_course', this.state.type_course);
-                    data.append('gender', this.state.gender);
-                    data.append('allowed', this.state.allowed);
-                    data.append('description', this.state.description);
-                    data.append('start_date', this.state.start_date);
-                    data.append('end_date', this.state.end_date);
-                    data.append('start_time', this.state.start_time);
-                    data.append('end_time', this.state.end_time);
-                    data.append('img', url);
+        if(!this.selectImage()){
+            AsyncStorage.getItem('token').then(userToken => {
+                let data = new FormData();
+                start_duration = this.state.start_date+" "+this.state.start_time;
+                end_duration = this.state.end_date+" "+this.state.end_time;
+                data.append('title', this.state.title);
+                data.append('price', this.state.price);
+                data.append('payment', this.state.payment);
+                data.append('type_course', this.state.type_course);
+                data.append('gender', this.state.gender);
+                data.append('allowed', this.state.allowed);
+                data.append('description', this.state.description);
+                data.append('start_duration', start_duration);
+                data.append('end_duration', end_duration);
+                data.append('start_date', this.state.start_date);
+                data.append('end_date', this.state.end_date);
+                data.append('start_time', this.state.start_time);
+                data.append('end_time', this.state.end_time);
+                data.append('img', this.state.img);
+
+                if(this.state.tableData == []){
+                    return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
+                        this.setState({
+                            isLoading: false,
+                        });
+                        Toast.show({
+                            text: "A Lecture was added successfully",
+                            buttonText: "Ok",
+                            type: "success"
+                        });
+                        this.props.setUser(response.data);
+                        this.props.navigation.navigate("Teacher");
+                    }).catch(error => {
+                        Toast.show({
+                            text: "Check your connection",
+                            buttonText: "Ok",
+                            type: "danger"
+                        });
+                        this.setState({
+                            isLoading: false,
+                        });
+                    })
+                }else{
                     return axios.post(Server.url + 'api/editLecture/'+id+'?token='+userToken, data).then(response => {
                         this.setState({
                             isLoading: false,
@@ -162,20 +192,143 @@ export default class EditLecture extends Component {
                             type: "success"
                         });
                         this.props.setUser(response.data);
-                        this.props.navigation.navigate("Teacher");
                     }).catch(error => {
+                        this.setState({
+                            isLoading: false
+                        });
                     })
-                }).then(() => {
+                }
+
+            }).catch(error => {
+                Toast.show({
+                    text: "Un error has ocured",
+                    buttonText: "Ok",
+                    type: "danger"
+                });
+                this.setState({
+                    isLoading: false
+                });
+            });
+
+        }else{
+
+            this.setState({
+                isLoading: true
+            });
+            var c = '/LectureImage/'+'_' + Math.random().toString(36).substr(2, 9);
+            firebase.storage()
+            .ref(c)
+            .putFile(this.state.img)
+            .then(snapshot => {
+                firebase.storage().ref(c).getDownloadURL().then(url => {
+                    AsyncStorage.getItem('token').then(userToken => {
+                        let data = new FormData();
+                        start_duration = this.state.start_date+" "+this.state.start_time;
+                        end_duration = this.state.end_date+" "+this.state.end_time;
+                        data.append('title', this.state.title);
+                        data.append('price', this.state.price);
+                        data.append('payment', this.state.payment);
+                        data.append('type_course', this.state.type_course);
+                        data.append('gender', this.state.gender);
+                        data.append('allowed', this.state.allowed);
+                        data.append('description', this.state.description);
+                        data.append('start_duration', start_duration);
+                        data.append('end_duration', end_duration);
+                        data.append('start_date', this.state.start_date);
+                        data.append('end_date', this.state.end_date);
+                        data.append('start_time', this.state.start_time);
+                        data.append('end_time', this.state.end_time);
+                        data.append('img', url);
+    
+                        if(this.state.tableData == []){
+                            return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "A Lecture was added successfully",
+                                    buttonText: "Ok",
+                                    type: "success"
+                                });
+                                this.props.setUser(response.data);
+                                this.props.navigation.navigate("Teacher");
+                            }).catch(error => {
+                                Toast.show({
+                                    text: "Check your connection",
+                                    buttonText: "Ok",
+                                    type: "danger"
+                                });
+                                this.setState({
+                                    isLoading: false,
+                                });
+                            })
+                        }else{
+                            return axios.post(Server.url + 'api/editLecture/'+id+'?token='+userToken, data).then(response => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "A lecture was edited successfully",
+                                    buttonText: "Ok",
+                                    type: "success"
+                                });
+                                this.props.setUser(response.data);
+                            }).catch(error => {
+                                this.setState({
+                                    isLoading: false
+                                });
+                            })
+                        }
+    
+                    }).catch(error => {
+                        Toast.show({
+                            text: "Un error has ocured",
+                            buttonText: "Ok",
+                            type: "danger"
+                        });
+                        this.setState({
+                            isLoading: false
+                        });
+                    });
+                }).catch(error => {
                     this.setState({
                         isLoading: false
                     });
+                })
+            }).catch(error => {
+                this.setState({
+                    isLoading: false
                 });
-            })
-        });
+                Toast.show({
+                    text: "Un known error has ocured",
+                    buttonText: "Ok",
+                    type: "danger"
+                });            
+            });
+        }
         
     }
 
     componentDidMount(){
+        return axios.get(Server.url + 'api/addlectureusers')
+        .then(response=>{
+            this.setState({
+                searchedUsers: response.data,
+                showData: this.state.searchedUsers
+            })
+            let showData = []
+            showData = _.map(response.data, user => {
+                return {...user, name: user.name + " - " + user.phone.toString().slice(0, 8)+"xxx"}
+            } )
+            this.setState({
+                datas: showData
+            })
+        }).catch(error => {
+           
+        })
+    }
+
+    
         // var timeStart = new Date("01/01/2007 " + this.state.start_duration).getHours() + (new Date("01/01/2007 " + this.state.start_duration).getMinutes()/60);
         // var timeEnd = new Date("01/01/2007 " + this.state.end_duration).getHours()+ (new Date("01/01/2007 " + this.state.end_duration).getMinutes()/60);
         // if(timeStart>timeEnd){
@@ -211,7 +364,7 @@ export default class EditLecture extends Component {
         // var d = new Date(Date.now())
         // d.setDate(d.getDate()-5);
         // alert(d);
-    }
+    
     
     render() {
         const data = this.state;
@@ -384,6 +537,30 @@ export default class EditLecture extends Component {
                             />
                         </Item>
 
+                        <MultiSelect
+                            hideTags
+                            items={this.state.datas}
+                            uniqueKey="id"
+                            ref={(component) => { this.multiSelect = component }}
+                            onSelectedItemsChange={this.onSelectedItemsChange}
+                            selectedItems={this.state.tableData}
+                            selectText="Add students"
+                            searchInputPlaceholderText="Search students..."
+                            onChangeInput={ (text)=> console.log(text)}
+                            altFontFamily="ProximaNova-Light"
+                            tagRemoveIconColor="#CCC"
+                            tagBorderColor="#CCC"
+                            tagTextColor="#CCC"
+                            selectedItemTextColor="#CCC"
+                            selectedItemIconColor="#CCC"
+                            itemTextColor="#000"
+                            displayKey="name"
+                            searchInputStyle={{ color: '#CCC' }}
+                            submitButtonColor="#CCC"
+                            submitButtonText="Submit"
+                            styles={{backgroundColor: 'red'}}
+                        />
+
                                
                         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
                             <Icon type="MaterialIcons" name='description' />
@@ -463,3 +640,15 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto",
     },
 });
+
+const mapStateToProps = ({ user }) => ({
+    user,
+});
+
+const mapDispatchToProps = {
+    setUser,
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(EditLecture);

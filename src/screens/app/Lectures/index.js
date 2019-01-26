@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator, Slider, Linking, TouchableHighlight, Modal } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator, Slider, Linking, TouchableHighlight } from 'react-native';
 import { Icon, Form, Item, Picker, DatePicker, Button, Label, List, ListItem, Left, Body, 
     Right, Thumbnail, Card, CardItem, Toast, Textarea, H3, Input} from 'native-base';
 import Color from '../../../constants/colors';
@@ -10,6 +10,7 @@ import {setUser} from "../../../reducers";
 import {connect} from "react-redux";
 import moment from 'moment'
 import _ from 'lodash'
+import Modal from "react-native-modal";
 
 class Lectures extends Component {
     constructor(props) {
@@ -88,9 +89,6 @@ class Lectures extends Component {
             [
                 {text: "Cancel", onPress: () => console.log('Cancel Pressed')},
                 {text: "Ok", onPress: () => {
-                        this.setState({
-                            isDeleting: true,
-                        });
                         AsyncStorage.getItem('token').then(userToken => {
                             return axios.post(Server.url + 'api/unjoint/'+this.state.lecture.id+'?token='+userToken)
                             .then(response => {
@@ -134,8 +132,8 @@ class Lectures extends Component {
                         AsyncStorage.getItem('token').then(userToken => {
                             return axios.delete(Server.url+'api/deleteLecture/'+this.state.lecture.id+'?token='+userToken).then(response => {
                                 // alert(response.data);
-                                this.props.setUser(response.data);
                                 this.props.navigation.navigate("Teacher");
+                                this.props.setUser(response.data);
                                 this.setState({
                                     isLoading: false,
                                 });
@@ -425,7 +423,7 @@ class Lectures extends Component {
                             {/* <Button onPress={()=> this.onRegisterPressed()}>
                                 <Text>register</Text>
                             </Button> */}
-                                <Text style={styles.txt}>{this.state.lecture.user.name}</Text>
+                                <Text style={styles.txt}>{this.state.lecture.user.name} {this.state.lecture.user.middleName} {this.state.lecture.user.lastName}</Text>
                                 <Text style={styles.txt}>{this.state.lecture.title}</Text>
                             </View>
                             <View style={styles.allStars}>
@@ -538,6 +536,14 @@ class Lectures extends Component {
                             </Text>
                         </Item>
 
+                        <View style={{flexDirection: 'row', paddingTop: 10, paddingBottom: 5}}>
+                            <Icon type="FontAwesome" name="info-circle" style={{fontSize: 22}} />
+                            <H3 style={styles.lectureTxt}>Description</H3>
+                        </View>
+                        <Text>
+                        {this.state.lecture.description}
+                        </Text>
+
                     </View>
 
                 <Text style={styles.commentTxt}>Comments</Text>
@@ -570,7 +576,7 @@ class Lectures extends Component {
                                     //     <Modal
                                     //     animationType="slide"
                                     //     transparent={false}
-                                    //     visible={this.state.modalVisible}
+                                    //     isVisible={this.state.modalVisible}
                                     //     onRequestClose={() => {
                                     //         alert('Modal has been closed.');
                                     //     }}>
@@ -623,7 +629,8 @@ class Lectures extends Component {
                         />
                         {
                             (this.props.user.type == 1)? (
-                                (_.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id))&&(
+                                (_.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id && 
+                                    lecture.pivot.amount != 0))&&(
                                 <View>
                                 <CardItem>
                                     <Icon type="MaterialIcons" name='rate-review' />

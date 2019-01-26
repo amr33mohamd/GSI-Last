@@ -99,6 +99,16 @@ export default class Search extends Component {
             <AppTemplate navigation={this.props.navigation} back title="Search">
             <View style={styles.content}>
                 <View style={styles.Box}>
+                
+                    <Item style={styles.lecture}>
+                        <Icon type="Foundation" name="results" />
+                        <Text style={styles.lectureTxt}>Teacher</Text>
+                        <Input onChangeText={(teacher) => this.setState({teacher})}
+                                placeholder="Teacher name"
+                                placeholderTextColor="#ccc5c5"
+                        />
+                    </Item>
+                    
                     <Item style={styles.lecture}>
                         <Icon type="FontAwesome" name="user" />
                         <Text style={styles.lectureTxt}>Lecture</Text>
@@ -137,15 +147,6 @@ export default class Search extends Component {
                             />
                       </View>
                     </Item> */}
-
-                    <Item style={styles.lecture}>
-                        <Icon type="Foundation" name="results" />
-                        <Text style={styles.lectureTxt}>Teacher</Text>
-                        <Input onChangeText={(teacher) => this.setState({teacher})}
-                                placeholder="Teacher name"
-                                placeholderTextColor="#ccc5c5"
-                        />
-                    </Item>
 
                     <Button style={styles.button} onPress={ ()=> this.Data()}>
                         <Text style={styles.buttonTxt}>Search</Text>
