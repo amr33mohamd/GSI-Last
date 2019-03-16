@@ -5,6 +5,7 @@ import Server from '../../../constants/config';
 import axios from "axios";
 import {setUser} from "../../../reducers";
 import {connect} from "react-redux";
+import firebase, {Notification, NotificationOpen} from 'react-native-firebase';
 
 class SignIn extends Component {
     constructor(props){
@@ -15,9 +16,71 @@ class SignIn extends Component {
             password: ""
         }
     }
+    componentDidMount(){
+        this.notificationPermission();
 
+        firebase.notifications().getInitialNotification()
+            .then((notificationOpen: NotificationOpen) => {
+                if (notificationOpen) {
+
+                }
+            });
+
+        // notification listner
+        this.pushNotiListner()
+
+        // notification open
+        this.onPushNotiOpen();
+    }
+    notificationPermission = () => {
+        firebase.messaging().hasPermission()
+            .then(enabled => {
+                if (enabled) {
+                    // user has permissions
+                    console.log('Permission already granted.')
+                } else {
+                    // user doesn't have permission
+                    console.log('No permission yet, Requesting...')
+                    firebase.messaging().requestPermission()
+                        .then(() => {
+                            // User has authorised
+                            console.log('Permission granted.')
+                        })
+                        .catch(error => {
+                            // User has rejected permissions
+                            console.log('permission denied')
+                            console.log(error)
+                        });
+                }
+            });
+    }
+    pushNotiListner = () => {
+        this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
+            // Process your notification as required
+            console.log('three')
+            console.log(notification)
+            // Display the notification
+            notification.android.setChannelId('test-channel');
+            firebase.notifications().displayNotification(notification)
+        });
+        const channel = new firebase.notifications.Android.Channel('test-channel', 'Test Channel', firebase.notifications.Android.Importance.Max)
+            .setDescription('My apps test channel');
+        console.log(channel)
+        // Create the channel
+        firebase.notifications().android.createChannel(channel);
+    }
+    onPushNotiOpen = () => {
+        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
+            console.log('Notifications has been opend >>>>>>>>>>>>>>>>')
+            //   this.props.navigation.navigate('Notifications')
+            // Get the action triggered by the notification being opened
+            const action = notificationOpen.action;
+            // Get information about the notification that was opened
+            const notification: Notification = notificationOpen.notification;
+        });
+    }
     onLoginPressed(){
-        
+
         if(this.state.email == '' || this.state.password == ''){
             Toast.show({
                 text: 'Email and password cannot be empty.',
