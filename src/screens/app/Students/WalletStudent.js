@@ -11,7 +11,8 @@ class WalletStudent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            random:['#d93232', '#636c8f', '#6c856c', '#fbaf5d'],            
+            random:['#d93232', '#636c8f', '#6c856c', '#fbaf5d'],  
+            amount: ""          
         }
     }
 
@@ -37,10 +38,36 @@ class WalletStudent extends Component {
     // alert(JSON.stringify(this.state.lecture))
     
     // }
+
+    componentDidMount()
+    {
+        let amount = 0;
+        for(let i in this.props.user.joint_lectures){
+            amount = amount + parseInt(this.props.user.joint_lectures[i].pivot.amount);
+            if(i ==  this.props.user.joint_lectures.length-1 ){
+                this.setState({amount})                
+            }
+        }
+    }
     
     render() {
         return (
-            <AppTemplate back navigation={this.props.navigation} title = "Wallet">  
+            <AppTemplate navigation={this.props.navigation} title = "Wallet"> 
+
+                <View style={styles.content}>
+
+                    <Card style={{borderWidth: 0}} transparent={true}>
+                        <CardItem style={{}}>
+                            <Left>
+                                <Text>Balance: </Text>
+                            </Left>
+                            <Right>
+                                <Text>{this.state.amount}</Text>
+                            </Right>
+                        </CardItem>
+                    </Card>
+                </View> 
+
                 <View style={styles.content}>
 
                 <FlatList

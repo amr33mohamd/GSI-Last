@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, AsyncStorage, ActivityIndicator, ListView, TextInput, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, AsyncStorage, ActivityIndicator, ListView, TextInput, TouchableOpacity, FlatList} from 'react-native';
 import {
     Button,
     Item,
@@ -34,6 +34,7 @@ class AddLecture extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            new_tableData:[],
             isLoading: false,
             title: "",
             price: 0,
@@ -76,12 +77,22 @@ class AddLecture extends Component {
     _hideEndTimePicker = () => this.setState({ isEndTimeVisible: false });
 
     _handleStartDatePicked = (date) => {
-        this.setState({
-            isStartDateVisible: false,
-            start_date: moment(date).format('YYYY-MM-DD'),
-            end_date: moment(date).format('YYYY-MM-DD')
-            // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
-        })
+        if(moment(date).isBefore(Date.now(), 'day')){
+            alert('You can\'t choose day before today');
+            this.setState({
+                isStartDateVisible: false,
+                start_date: moment(Date.now()).format('YYYY-MM-DD'),
+                end_date: moment(Date.now()).format('YYYY-MM-DD')
+                // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
+            })
+        }else{
+            this.setState({
+                isStartDateVisible: false,
+                start_date: moment(date).format('YYYY-MM-DD'),
+                end_date: moment(date).format('YYYY-MM-DD')
+                // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
+            })
+        }
     };
 
     _handleEndDatePicked = (date) => {
@@ -130,7 +141,7 @@ class AddLecture extends Component {
             })
             let showData = []
             showData = _.map(response.data, user => {
-                return {...user, name: user.name + " - " + user.phone.toString().slice(0, 8)+"xxx"}
+                return {...user, name: user.name + " " + user.middleName + " " + user.lastName + " - " + user.phone.toString().slice(0, 4)+"xxx"+user.phone.toString().slice(7, 12)}
             } )
             this.setState({
                 datas: showData
@@ -148,10 +159,25 @@ class AddLecture extends Component {
     //     });
     //     this.setState({searchedAdresses: searchedAdresses});
     //     };
-
-        onSelectedItemsChange = tableData => {
+       onSelectedItemsChange = tableData => {
             this.setState({ tableData });
-        };
+            var new_tableData =[];
+            for(var i=0; i<=tableData.length; i++ ){
+                var new_data =  _.filter(this.state.datas, student => student.id == tableData[i]);
+                if(new_data.length != 0){
+                    new_tableData.push({new_data});
+                    
+                }
+              if(i == tableData.length){
+                this.setState({new_tableData})
+                
+              }
+                
+            }
+           
+            
+            };
+
 
         // add_student = (id,name,mobile)=>{
         //     tableData = {
@@ -265,8 +291,8 @@ class AddLecture extends Component {
                                     buttonText: "Ok",
                                     type: "success"
                                 });
-                                this.props.navigation.navigate("Teacher");
                                 this.props.setUser(response.data);
+                                this.props.navigation.navigate("Teacher");
                             }).catch(error => {
                                 Toast.show({
                                     text: "Check your connection",
@@ -655,7 +681,19 @@ class AddLecture extends Component {
                             styles={{backgroundColor: 'red'}}
                         />
 
-                        <Text>{this.state.tableData}</Text>
+                        {/* <View>
+                            <Text>{JSON.stringify(this.state.new_tableData[0])}</Text>
+                        </View> */}
+
+                        <FlatList
+                        data={this.state.new_tableData}
+                        renderItem={({item}) => (
+                        <View>
+                            <Text style={{textAlign: 'center'}}>{item.new_data[0].name}</Text>
+                        </View>
+                        )}
+                        keyExtractor = { (item, index) => index.toString() }
+                        />
                                
                         <Item style={{height: 70, borderColor: "transparent", paddingBottom: 0, marginBottom: 0}} underline={false}>
                             <Icon type="MaterialIcons" name='description' />

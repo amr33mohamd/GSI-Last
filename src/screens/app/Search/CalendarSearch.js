@@ -189,11 +189,12 @@ export default class CalendarSearch extends Component {
 
     renderItem(item) {
         return (
-            <TouchableOpacity style={[styles.item, {height:90,borderBottomColor:'orange',borderBottomWidth:1}]}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
+            <TouchableOpacity style={[styles.item, {height:110,borderBottomColor:'orange',borderBottomWidth:1}]}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
                 <Text style={styles.itemTxt}>Title: {item.title}</Text>
-                <Text style={styles.itemTxt}>Teacher: {item.user.name}</Text>
+                <Text style={styles.itemTxt}>Teacher: {item.user.name} {item.user.middleName} {item.user.lastName}</Text>
+                <Text style={styles.itemTxt}>desc: {item.description}</Text>
                 <Text style={styles.itemTxtDate}>{item.start_time} To {item.end_time}</Text>
-                <Image source={require('../../../images/idea.png')} style={{position: 'absolute', right: 20, top: 20, borderRadius:50, width: 50, height:50}}/>
+                <Image source={{uri: item.img}} style={styles.image}/>
             </TouchableOpacity>
         );
     };
@@ -249,5 +250,13 @@ const styles = StyleSheet.create({
         height: 10,
         backgroundColor: "#f3f3f4",
         borderRadius:5,
+    },
+    image:{
+        position: 'absolute',
+        right: 20,
+        top: 20, 
+        borderRadius:50, 
+        width: 50, 
+        height:50 
     }
 });

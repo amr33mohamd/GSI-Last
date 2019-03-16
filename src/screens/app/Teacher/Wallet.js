@@ -102,7 +102,7 @@ export default class Wallet extends Component {
                                 <View style={styles.secondBox}>
                                     <Item style={{height: 45}}>
                                         <Image source={require('../../../images/No-headshot.png')} style={styles.image}/>
-                                        <Label style={styles.font}>{student.item.name} </Label>
+                                        <Label style={styles.font}>{student.item.name} {student.item.middleName} {student.item.lastName}</Label>
                                     </Item>
                                     <Item style={{height: 45}}>
                                         <Image source={require('../../../images/img_454446.png')} style={styles.image}/>
@@ -116,7 +116,7 @@ export default class Wallet extends Component {
                                         <Image source={require('../../../images/internt_web_technology-03-512.png')} style={styles.image}/>
                                         <Label style={styles.font}>Payment Method: </Label>
                                         <Image source={require('../../../images/21.png')} style={styles.imageRight}/>
-                                        <Text style={styles.rightCash}>Cash </Text>
+                                        <Text style={styles.rightCash}>{student.item.type} </Text>
                                     </Item>
                                     <Item style={{height: 45}}>
                                         <Image source={require('../../../images/calendar_131786.png')} style={styles.image}/>

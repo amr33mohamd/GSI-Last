@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, AsyncStorage, TouchableOpacity,FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, AsyncStorage, TouchableOpacity, FlatList, Keyboard } from 'react-native';
 import { Icon, Form, Item, Button, Input } from 'native-base';
 import Color from '../../../constants/colors';
 import AppTemplate from "../appTemplate";
@@ -8,6 +8,7 @@ import Server from "../../../constants/config";
 import _ from 'lodash';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment'
+import MultiSelect from 'react-native-multiple-select';
 
 export default class Search extends Component {
     constructor(props) {
@@ -21,35 +22,37 @@ export default class Search extends Component {
             isEndTimeVisible: false,
             start_duration: " Start Time",
             end_duration: " End Time",
-            searchLectures: []
+            searchLectures: [],
+            isPressed: false,
+            searchedUsers: [],
+            datas: [],
+            new_tableData:[],
+            tableData: []
          };
       }
 
-      _showStartTimePicker = () => this.setState({ isStartTimeVisible: true });
-      _showEndTimePicker = () => this.setState({ isEndTimeVisible: true });
-  
-      _hideStartTimePicker = () => this.setState({ isStartTimeVisible: false });
-      _hideEndTimePicker = () => this.setState({ isEndTimeVisible: false });
-      
-      _handleStartTimePicked = (date) => {
-          this.setState({
-              isStartTimeVisible: false,
-              start_duration: moment(date).format('YYYY-MM-DD h:mm a')
-          })
-      };
-  
-      _handleEndTimePicked = (date) => {
-          this.setState({
-              isEndTimeVisible: false,
-              end_duration: moment(date).format('YYYY-MM-DD h:mm a')
-          })
-      };
+      onSelectedItemsChange = tableData => {
+        this.setState({ tableData });
+        var new_tableData =[];
+        for(var i=0; i<=tableData.length; i++ ){
+            var new_data =  _.filter(this.state.datas, student => student.id == tableData[i]);
+            if(new_data.length != 0){
+                new_tableData.push({new_data});
+                
+            }
+          if(i == tableData.length){
+            this.setState({new_tableData})
+            
+          }
+            
+        }
+        };
 
       componentDidMount(){
         this.setState({
             isLoading: true
         })
-            return axios.get(Server.url + 'api/lectures?token=')
+            axios.get(Server.url + 'api/lectures?token=')
             .then(response => {
                 this.setState({
                     isLoading: false,
@@ -62,6 +65,25 @@ export default class Search extends Component {
                     type: "danger"
                 })
             });
+
+        this.Data();
+
+        axios.get(Server.url + 'api/getteachers')
+        .then(response=>{
+            this.setState({
+                searchedUsers: response.data,
+                showData: this.state.searchedUsers
+            })
+            let showData = []
+            showData = _.map(response.data, user => {
+                return {...user, name: user.name+ " " + user.middleName + " " + user.lastName }
+            } )
+            this.setState({
+                datas: showData
+            })
+        }).catch(error => {
+
+        })
 
     }
 
@@ -76,10 +98,26 @@ export default class Search extends Component {
         //   if(this.state.subject != ""){
         //       data = await _.filter(data, lecture => lecture.subject.toLowerCase().indexOf(this.state.subject.toLowerCase()) > -1);
         //   }
-
-          if(this.state.teacher !== ""){
-            data = await _.filter(data, lecture => lecture.user.name == this.state.teacher);
+        var new_data = [];
+        
+        for(let i in this.state.new_tableData){
+                data = await _.filter(data, lecture => lecture.user.id == this.state.new_tableData[i].new_data[0].id );
+        //    alert( JSON.stringify(this.state.new_tableData[i].new_data[0].id))
+           
+          new_data.push({data});
+          if(this.state.new_tableData.length-1 == i){
+            this.setState({
+                searchLectures: new_data,
+                isPressed: true
+            })
+          }
         }
+
+
+        // if(this.state.teacher !== ""){
+        //     data = await _.filter(data, lecture => lecture.user.name == this.state.teacher);
+        // }
+         
 
         // if(this.state.start_duration !== ""){
             
@@ -87,11 +125,9 @@ export default class Search extends Component {
         //     .format('YYYY-MM-DD h:mm a')).isAfter(this.state.start_duration));
         // }
         
+        Keyboard.dismiss()
 
-        this.setState({
-            searchLectures: data
-        })
-           
+        
       }
     
     render() {
@@ -100,14 +136,14 @@ export default class Search extends Component {
             <View style={styles.content}>
                 <View style={styles.Box}>
                 
-                    <Item style={styles.lecture}>
+                    {/* <Item style={styles.lecture}>
                         <Icon type="Foundation" name="results" />
                         <Text style={styles.lectureTxt}>Teacher</Text>
                         <Input onChangeText={(teacher) => this.setState({teacher})}
                                 placeholder="Teacher name"
                                 placeholderTextColor="#ccc5c5"
                         />
-                    </Item>
+                    </Item> */}
                     
                     <Item style={styles.lecture}>
                         <Icon type="FontAwesome" name="user" />
@@ -117,6 +153,29 @@ export default class Search extends Component {
                                 placeholderTextColor="#ccc5c5"
                         />
                     </Item>
+
+                    <MultiSelect
+                            hideTags
+                            items={this.state.datas}
+                            uniqueKey="id"
+                            ref={(component) => { this.multiSelect = component }}
+                            onSelectedItemsChange={this.onSelectedItemsChange}
+                            selectedItems={this.state.tableData}
+                            selectText="Search Teacher"
+                            searchInputPlaceholderText="Search Teacher..."
+                            onChangeInput={ (text)=> console.log(text)}
+                            tagRemoveIconColor="#CCC"
+                            tagBorderColor="#CCC"
+                            tagTextColor="#CCC"
+                            selectedItemTextColor="#CCC"
+                            selectedItemIconColor="#CCC"
+                            itemTextColor="#000"
+                            displayKey="name"
+                            searchInputStyle={{ color: '#CCC' }}
+                            submitButtonColor="#CCC"
+                            submitButtonText="Submit"
+                            styles={{backgroundColor: 'red'}}
+                        />
 
                     {/* <Item style={styles.lecture}>
                         <Icon type="FontAwesome" name="calendar" />
@@ -155,27 +214,33 @@ export default class Search extends Component {
                 </View>
 
                 {
-                    (()=> this.Data())?(
-                        <FlatList
-                        data={this.state.searchLectures}
-                        renderItem={({item}) => (
-                            <View style={styles.Box1}>
-                                <Item style={styles.item}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
-                                    <View style={styles.viewImage}>
-                                        <Image source={require('../../../images/idea.png')} style={styles.image}/>
-                                    </View>
-                                    <View>
-                                        <Text style={styles.txt}>{item.title}</Text>
-                                        <Text style={styles.txt}>{item.user.name}</Text>
-                                        <Text style={styles.txt}>{item.start_date}</Text>
-                                        <Text style={styles.txt}>{item.start_time}</Text>
-                                    </View>
-                                </Item>
-                            </View>
-                        )}
-                        keyExtractor = { (item, index) => index.toString() }
-                        />
-                    ):null
+                    (this.state.isPressed == true) ? (
+                        (()=> this.Data())?(
+                            <FlatList
+                            ListEmptyComponent={
+                                <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No result</Text>
+                            }
+                            data={this.state.searchLectures[0].data}
+                            renderItem={({item}) => (
+                                <View style={styles.Box1}>
+                                    <Item style={styles.item}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
+                                        <View style={styles.viewImage}>
+                                            <Image source={require('../../../images/idea.png')} style={styles.image}/>
+                                        </View>
+                                        <View>
+                                            <Text style={styles.txt}>{item.title}</Text>
+                                            <Text style={styles.txt}>{item.user.name} {item.user.middleName} {item.user.lastName}</Text>
+                                            <Text style={styles.txt}>{item.start_date}</Text>
+                                            <Text style={styles.txt}>{item.start_time}</Text>
+                                        </View>
+                                    </Item>
+                                </View>
+                            )}
+                            keyExtractor = { (item, index) => index.toString() }
+                            />
+                        ):null
+
+                    ): null
                 }
 
             </View>

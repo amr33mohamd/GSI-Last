@@ -87,7 +87,7 @@ export default class LecturePayment extends Component {
                             <CardItem style={{}}>
                                 <Left>
                                 <Thumbnail source={require('../../../images/Background.png')} />
-                                <Text style={{paddingLeft: 10, fontSize: 19, fontFamily: "Roboto",}}>{item.name}</Text>
+                                <Text style={{paddingLeft: 10, fontSize: 19, fontFamily: "Roboto",}}>{item.name} {item.middleName} {item.lastName}</Text>
                                 </Left>
                                 <Right style={styles.allStarsComment}>
                                     <View style={{ width: 10, height: 80, backgroundColor: this.state.random[item.id % 4], 

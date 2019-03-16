@@ -42,8 +42,10 @@ class Lectures extends Component {
 
     onRegisterPressed(){
         Alert.alert(
-            "Are you sure?",
-            "You want to pay now or later",
+            "Are you sure",
+            "1.	هذا المبلغ غير مسترد كاش تحت أي ظرف من الظروف. \n "+
+            "2.	في حال إلغاء الانضمام قبل موعد بدأ المحاضرة بساعتين يسترد المبلغ في المحفظة \n"+
+            "3.	في حال إلغاء الانضمام بعد اقل من موعد بدأ المحاضرة بساعتين يسترد 90% من المبلغ في المحفظة",
             [
                 { text: "Now", onPress: () =>  this.props.navigation.navigate('WeebView', {...this.state.lecture}) },
                 {text: "Later", onPress: () => {
@@ -159,6 +161,45 @@ class Lectures extends Component {
         )
     }
 
+    deleteComment(id){
+        Alert.alert(
+            "Are you sure?",
+            "No one will be able to show this comment after deleting",
+            [
+                {text: "Cancel", onPress: () => console.log('Cancel Pressed')},
+                {text: "Ok", onPress: () => {
+                        this.setState({
+                            isDeleting: true,
+                        });
+                        AsyncStorage.getItem('token').then(userToken => {
+                            return axios.delete(Server.url+'api/deletecomment/'+id+'?token='+userToken).then(response => {
+                                // alert(response.data);
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                this.componentDidMount();
+                                Toast.show({
+                                    text: "Comment deleted successfully",
+                                    buttonText: "Ok",
+                                    type: "success"
+                                })
+                            }).catch(error => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "Unknown error has occurred",
+                                    buttonText: "Ok",
+                                    type: "danger"
+                                })
+                            })
+                        });
+                    }},
+            ],
+            { cancelable: false }
+        )
+    }
+
     componentDidMount(){
         formated_date = this.state.lecture.start_duration.replace('-','/').replace('-','/')
         date = new Date(formated_date);
@@ -206,19 +247,17 @@ class Lectures extends Component {
 
     }
 
-    editComment(){
-
-    }
-
     onPayPressed()
     {
         Alert.alert(
             "Are you sure",
-            "You have to pay before attend and by paying you accept our privacy&policy?",
+            "1.	هذا المبلغ غير مسترد كاش تحت أي ظرف من الظروف. \n "+
+            "2.	في حال إلغاء الانضمام قبل موعد بدأ المحاضرة بساعتين يسترد المبلغ في المحفظة \n"+
+            "3.	في حال إلغاء الانضمام بعد اقل من موعد بدأ المحاضرة بساعتين يسترد 90% من المبلغ في المحفظة",
             [
                 {text: "Cancel", onPress: () => console.log('Cancel Pressed')},
                 { text: "pay", onPress: () =>  this.props.navigation.navigate('WeebView', {...this.state.lecture}) },
-                {text: "privacy", onPress: () => Linking.openURL(this.state.url)},
+                // {text: "privacy", onPress: () => Linking.openURL(this.state.url)},
             ],
             { cancelable: false }
         )
@@ -365,19 +404,27 @@ class Lectures extends Component {
                                 </Button>
 
                             ):(
-                                <Button
-                                onPress={()=> this.onRegisterPressed()}
-                                style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
-        
-                                <Text style={{flex: 1, paddingLeft: 10}}> Join </Text>
-                                {this.state.isApplying && (
-                                    <ActivityIndicator size="small" color="#000000" />
-                                )}
-        
-                                <Icon type="Entypo" name="circle-with-plus" style={{color: Color.mainColor, fontSize: 25}}/>
-        
-                                </Button>
-
+                                (this.props.user.gender == this.state.lecture.gender || this.state.lecture.gender == 3)?
+                                (
+                                    (moment(Date()).format('YYYY-MM-DD hh:mm A') == moment(this.state.lecture.start_duration, 'YYYY-MM-DD hh:mm A').add(1, 'hours').format('YYYY-MM-DD hh:mm A'))
+                                    ?null
+                                    :(
+                                        <Button
+                                        onPress={()=> this.onRegisterPressed()}
+                                        style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
+                
+                                        <Text style={{flex: 1, paddingLeft: 10}}> Join </Text>
+                                        {this.state.isApplying && (
+                                            <ActivityIndicator size="small" color="#000000" />
+                                        )}
+                
+                                        <Icon type="Entypo" name="circle-with-plus" style={{color: Color.mainColor, fontSize: 25}}/>
+                
+                                        </Button>                                    
+                                    )
+                                
+                                )
+                                :null
                             )
 
                         )
@@ -393,11 +440,16 @@ class Lectures extends Component {
                                     <List style={{backgroundColor: "#d3d3ea", right: 0}}>
                                         {
                                             (this.state.editable == 1) ? (
-                                                <ListItem
-                                                    onPress={() => this.props.navigation.navigate("EditLecture", {...this.state.lecture})}
-                                                >
-                                                    <Text style={{flex: 1, color: '#000'}}>Edit Lecture</Text>
-                                                </ListItem>
+                                                (moment( moment(Date()).format('YYYY-MM-DD') ).isAfter( this.state.lecture.start_date ))?
+                                                    null:(
+                                                        <ListItem
+                                                            onPress={() => this.props.navigation.navigate("EditLecture", {...this.state.lecture})}
+                                                        >
+
+                                                            <Text style={{flex: 1, color: '#000'}}>Edit Lecture</Text>
+                                                        </ListItem>
+                                                    
+                                                    )
 
                                             ):null
                                             
@@ -568,6 +620,11 @@ class Lectures extends Component {
                                     this.createRating(item.rate)
                                 }
                                 {
+                                    (this.props.user.id == item.user_id)?(
+                                        <TouchableHighlight onPress={() => this.deleteComment(item.id) }>
+                                            <Icon type="MaterialCommunityIcons" name ="delete-circle" style={{fontSize:24, paddingLeft:5}} />
+                                        </TouchableHighlight>
+                                    ):null
                                     // (this.props.user.id == item.user_id)?(
                                     //     <View>
                                     //     <TouchableHighlight onPress={() => { this.setModalVisible(true,item.id, item.comment); }}>

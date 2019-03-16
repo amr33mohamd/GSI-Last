@@ -5,6 +5,8 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage; 
+// import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
@@ -31,7 +33,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFirebasePackage(),
             new ImagePickerPackage(),
             new RNGestureHandlerPackage(),
-            new RNFirebaseStoragePackage()
+            new RNFirebaseStoragePackage(),
+            new RNFirebaseMessagingPackage()
       );
     }
 

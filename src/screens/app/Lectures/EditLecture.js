@@ -108,7 +108,7 @@ class EditLecture extends Component {
 
     selectImage(){
         let options = {
-            title: "Course Image",
+            title: "Lecture Image",
             storageOptions: {
                 skipBackup: true,
                 path: 'images'
@@ -169,8 +169,8 @@ class EditLecture extends Component {
                             buttonText: "Ok",
                             type: "success"
                         });
-                        this.props.setUser(response.data);
                         this.props.navigation.navigate("Teacher");
+                        this.props.setUser(response.data);
                     }).catch(error => {
                         Toast.show({
                             text: "Check your connection",
@@ -250,8 +250,8 @@ class EditLecture extends Component {
                                     buttonText: "Ok",
                                     type: "success"
                                 });
-                                this.props.setUser(response.data);
                                 this.props.navigation.navigate("Teacher");
+                                this.props.setUser(response.data);
                             }).catch(error => {
                                 Toast.show({
                                     text: "Check your connection",

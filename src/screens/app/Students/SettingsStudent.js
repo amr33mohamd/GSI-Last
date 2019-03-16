@@ -68,32 +68,25 @@ class SettingsStudent extends Component {
     }
 
     changePassword(){
-        if(this.state.oldPassword > 6){
-            let text= 'password at least 6 characters';
-            Toast.show({
-                text,
-                type: 'danger',
-                buttonText: 'Okay'
-            });
-        }else{
-            this.setState({
-                isLoadingPassword: true,
-            });
-                if(this.state.oldPassword == '' || this.state.newPassword == ''){
-                    Toast.show({
-                        text: "Please fill out fields.",
-                        buttonText: "Ok",
-                        type: "danger"
-                    })
-                    this.setState({
-                        isLoadingPassword: false,
-                    });
-                }else{
-                    return AsyncStorage.getItem('token').then(userToken => {
-                        return axios.post(Server.url+'api/auth/updatepassword?token='+userToken,{
-                            oldPassword: this.state.oldPassword,
-                            newPassword: this.state.newPassword
-                        }).then(response => {
+        this.setState({
+            isLoadingPassword: true,
+        });
+            if(this.state.oldPassword == '' || this.state.newPassword == ''){
+                Toast.show({
+                    text: "Please fill out fields.",
+                    buttonText: "Ok",
+                    type: "danger"
+                })
+                this.setState({
+                    isLoadingPassword: false,
+                });
+            }else{
+                return AsyncStorage.getItem('token').then(userToken => {
+                    return axios.post(Server.url+'api/auth/updatepassword?token='+userToken,{
+                        oldPassword: this.state.oldPassword,
+                        newPassword: this.state.newPassword
+                    }).then(response => {
+                        if(response.data.status == "success"){
                             this.setState({
                                 isLoadingPassword: false,
                             });
@@ -102,22 +95,39 @@ class SettingsStudent extends Component {
                                 type: "success",
                                 buttonText: 'Okay'
                             });
-                        }).catch(error => {
+
+                        }else{
                             this.setState({
                                 isLoadingPassword: false,
                             });
-                            alert(JSON.stringify(error));
                             Toast.show({
-                                text: "Password does not match.",
+                                text: "Your old password is wrong.",
                                 buttonText: "Ok",
                                 type: "danger"
                             })
-                        })
+                        }
+                    }).catch(error => {
+                        this.setState({
+                            isLoadingPassword: false,
+                        });
+                        if(error.response.data.msg.newPassword){
+                            let text= error.response.data.msg.newPassword;
+                            Toast.show({
+                                text,
+                                type: 'danger',
+                                buttonText: 'Okay'
+                            });
+                        }else{
+                            Toast.show({
+                                text: "Your old password is wrong.",
+                                buttonText: "Ok",
+                                type: "danger"
+                            })
+                        }
                     })
-    
-                }
+                })
 
-        }
+            }
       }
 
       changeImg(){

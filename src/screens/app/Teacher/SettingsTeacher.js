@@ -22,7 +22,7 @@ class SettingsTeacher extends Component {
             civilIDNumber: this.props.user.civilIDNumber,
             gender: this.props.user.gender,
             oldPassword: "",
-            newpassword: "",
+            newPassword: "",
             isLoading: false,
             isLoadingPassword: false,
             img: this.props.user.img
@@ -68,54 +68,53 @@ class SettingsTeacher extends Component {
     }
 
     changePassword(){
-        if(this.state.oldPassword > 6){
-            let text= 'password at least 6 characters';
-            Toast.show({
-                text,
-                type: 'danger',
-                buttonText: 'Okay'
-            });
-        }else{
-            this.setState({
-                isLoadingPassword: true,
-            });
-                if(this.state.oldPassword == '' || this.state.newpassword == ''){
-                    Toast.show({
-                        text: "Please fill out fields.",
-                        buttonText: "Ok",
-                        type: "danger"
-                    })
-                    this.setState({
-                        isLoadingPassword: false,
-                    });
-                }else{
-                    return AsyncStorage.getItem('token').then(userToken => {
-                        return axios.post(Server.url+'api/auth/updatepassword?token='+userToken,{
-                            oldPassword: this.state.oldPassword,
-                            newpassword: this.state.newpassword
-                        }).then(response => {
-                            this.setState({
-                                isLoadingPassword: false,
-                            });
+        this.setState({
+            isLoadingPassword: true,
+        });
+            if(this.state.oldPassword == '' || this.state.newPassword == ''){
+                Toast.show({
+                    text: "Please fill out fields.",
+                    buttonText: "Ok",
+                    type: "danger"
+                })
+                this.setState({
+                    isLoadingPassword: false,
+                });
+            }else{
+                return AsyncStorage.getItem('token').then(userToken => {
+                    return axios.post(Server.url+'api/auth/updatepassword?token='+userToken,{
+                        oldPassword: this.state.oldPassword,
+                        newPassword: this.state.newPassword
+                    }).then(response => {
+                        this.setState({
+                            isLoadingPassword: false,
+                        });
+                        Toast.show({
+                            text: 'Successfully add new password',
+                            type: "success",
+                            buttonText: 'Okay'
+                        });
+                    }).catch(error => {
+                        this.setState({
+                            isLoadingPassword: false,
+                        });
+                        if(error.response.data.msg.newPassword){
+                            let text= error.response.data.msg.newPassword;
                             Toast.show({
-                                text: 'Successfully add new password',
-                                type: "success",
+                                text,
+                                type: 'danger',
                                 buttonText: 'Okay'
                             });
-                        }).catch(error => {
-                            this.setState({
-                                isLoadingPassword: false,
-                            });
-                            alert(JSON.stringify(error));
+                        }else{
                             Toast.show({
-                                text: "Password does not match.",
+                                text: "Your old password is wrong.",
                                 buttonText: "Ok",
                                 type: "danger"
                             })
-                        })
+                        }
                     })
-    
-                }
+                })
+
             }
         }
 
@@ -287,7 +286,7 @@ class SettingsTeacher extends Component {
                         <Item style={{height: 70}}>
                             <Icon type="FontAwesome" name='lock' style={{fontSize:17}} />
                             <Text style={styles.font}>New password </Text>
-                            <Input onChangeText={(newpassword) => this.setState({newpassword})}
+                            <Input onChangeText={(newPassword) => this.setState({newPassword})}
                                 placeholder="Enter new pass..."
                                 placeholderTextColor="#ccc5c5"
                                 secureTextEntry={true}

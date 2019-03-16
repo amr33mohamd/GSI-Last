@@ -40,8 +40,13 @@ const NotificationsStack = createStackNavigator({
 const ReportsStack = createStackNavigator({
     Reports,
     LectureStudent,
-    WalletStudent,
     Search
+},{
+    headerMode: 'none',
+});
+
+const WalletStack = createStackNavigator({
+    WalletStudent,
 },{
     headerMode: 'none',
 });
@@ -58,6 +63,7 @@ const AppStackStudent = createMaterialTopTabNavigator (
         StudentStack,
         NotificationsStack,
         ReportsStack,
+        WalletStack,
         SettingsStudentStack,
     },
     {
@@ -73,6 +79,9 @@ const AppStackStudent = createMaterialTopTabNavigator (
                 else if (routeName === 'ReportsStack') {
                     return <Icon name='news' style={{color: tintColor, fontSize: 30}} type="Entypo" />
                 }
+                else if (routeName === 'WalletStack') {
+                    return <Icon name='wallet' style={{color: tintColor, fontSize: 30}} type="Entypo" />
+                }
                 else if (routeName === 'SettingsStudentStack') {
                     return <Icon name='user-circle' style={{color: tintColor, fontSize: 25}} type="FontAwesome" />
                 }
@@ -84,10 +93,13 @@ const AppStackStudent = createMaterialTopTabNavigator (
                     return <Text style={{color: tintColor, fontSize: 12}}>Home</Text>;
                     break;
                   case 'NotificationsStack':
-                    return <Text style={{color: tintColor, fontSize: 12}}>Notifications</Text>;
+                    return <Text style={{color: tintColor, fontSize: 11}}>Notification</Text>;
                     break;
                   case 'ReportsStack':
                       return <Text style={{color: tintColor, fontSize: 12}}>Reports</Text>;
+                      break;
+                  case 'WalletStack':
+                      return <Text style={{color: tintColor, fontSize: 12}}>Wallet</Text>;
                       break;
                   case 'SettingsStudentStack':
                     return <Text style={{color: tintColor, fontSize: 12}}>Profile</Text>;

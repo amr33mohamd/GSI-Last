@@ -1,12 +1,29 @@
 import React, { Component } from 'react';
 import {NavigationActions} from 'react-navigation';
-import { Text, View, StyleSheet, Image, TouchableOpacity, AsyncStorage } from 'react-native'
-import { Icon } from 'native-base'
+import { Text, View, StyleSheet, Image, TouchableOpacity, AsyncStorage, FlatList } from 'react-native'
+import { Content,Icon } from 'native-base'
 import { white } from 'ansi-colors';
 import {setUser} from "../../src/reducers";
 import {connect} from "react-redux"
 
 class drawerContentComponents extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            amount: ""
+        }
+       
+    }
+    componentDidMount()
+    {
+        let amount = 0;
+        for(let i in this.props.user.joint_lectures){
+            amount = amount + parseInt(this.props.user.joint_lectures[i].pivot.amount);
+            if(i ==  this.props.user.joint_lectures.length-1 ){
+                this.setState({amount})                
+            }
+        }
+    }
 
     navigateToScreen = ( route ) =>(
         () => {
@@ -32,9 +49,12 @@ class drawerContentComponents extends Component {
                         style={{width: 45, height: 45, borderRadius: 30, position: 'absolute', right: 20 }} />
                         <Text style={styles.headerText}>{this.props.user.name} {this.props.user.middleName} {this.props.user.lastName}</Text>
                         <Text style={styles.headerText}>Student</Text>
+                        
+                        <Text style={styles.headerText}>Balance: {this.state.amount}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+            <Content>
             <View style={styles.screenContainer}>
                 <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('CalendarSearch')}>
                     <Image source={require('../images/home.png')} style={{width: 25, height: 25, marginRight: 20}} />
@@ -63,6 +83,7 @@ class drawerContentComponents extends Component {
                 <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('WalletStudent')}>
                     <Image source={require('../images/wallet.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Wallet</Text>
+                    <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.screenStyle} onPress={() => this.props.navigation.navigate('Course')}>
@@ -78,6 +99,7 @@ class drawerContentComponents extends Component {
                 </TouchableOpacity>
 
             </View>
+            </Content>
         </View>
 
     )
