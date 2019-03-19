@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator, Slider, Linking, TouchableHighlight } from 'react-native';
-import { Icon, Form, Item, Picker, DatePicker, Button, Label, List, ListItem, Left, Body, 
+import { Icon, Form, Item, Picker, DatePicker, Button, Label, List, ListItem, Left, Body,
     Right, Thumbnail, Card, CardItem, Toast, Textarea, H3, Input} from 'native-base';
 import Color from '../../../constants/colors';
 import AppTemplate from "../appTemplate";
@@ -15,7 +15,7 @@ import Modal from "react-native-modal";
 class Lectures extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             chosenDate: new Date(),
             lecture: this.props.navigation.state.params ,
             commentShows: '',
@@ -49,7 +49,7 @@ class Lectures extends Component {
             [
                 { text: "Now", onPress: () =>  this.props.navigation.navigate('WeebView', {...this.state.lecture}) },
                 {text: "Later", onPress: () => {
-                    
+
                     this.setState({
                         isLoading: true
                     });
@@ -70,7 +70,7 @@ class Lectures extends Component {
                                 text: "Check your Internet connection.",
                                 buttonText: "Ok",
                                 type: "danger"
-                            });                            
+                            });
                         })
                     }).then(() => {
                         this.setState({
@@ -79,7 +79,7 @@ class Lectures extends Component {
                     });
 
                 }}
-                
+
             ]
         )
     }
@@ -262,7 +262,7 @@ class Lectures extends Component {
             { cancelable: false }
         )
 
-        
+
     }
 
     createRating(rate){
@@ -322,7 +322,7 @@ class Lectures extends Component {
                 });
             });
 
-        })        
+        })
     }
 
     setModalVisible(visible, id, comment) {
@@ -348,22 +348,23 @@ class Lectures extends Component {
         //     })
         // })
       }
-    
+
     render() {
+      var datee =  moment(Date()).format('YYYY-MM-DD hh:mm A')
         var timeStart = new Date("01/01/2007 " + this.state.lecture.start_duration).getHours()
         return (
             <AppTemplate title = {this.state.lecture.title} back navigation={this.props.navigation}>
 
                 {
                     (this.props.user.type == 1) ? (
-                        _.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id && 
+                        _.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id &&
                             lecture.pivot.amount == 0 && lecture.pivot.type == 1) ? (
                                     <View>
                                     <Button onPress={() => this.setState({isSetting: !this.state.isSetting})} style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
                                     <Text style={{flex: 1, color: '#000'}}> Settings </Text>
                                     <Icon type="FontAwesome" name={this.state.isSetting? "arrow-circle-o-up": "arrow-circle-o-down"} style={{color: Color.mainColor, fontSize: 25}}/>
                                     </Button>
-                                    { 
+                                    {
                                         (this.state.isSetting) && (
                                             <List style={{backgroundColor: "#d3d3ea", right: 0}}>
                                                 {
@@ -373,11 +374,11 @@ class Lectures extends Component {
                                                         >
                                                             <Text style={{flex: 1, color: '#000'}}>Un join</Text>
                                                         </ListItem>
-        
+
                                                     ):null
-                                                    
+
                                                 }
-                                                
+
                                                 <ListItem
                                                     onPress={() => this.props.navigation.navigate('WeebView', {...this.state.lecture})}
                                                 >
@@ -386,43 +387,43 @@ class Lectures extends Component {
                                             </List>
                                         )
                                     }
-                                    </View>  
+                                    </View>
                         ):(
                             (this.state.lecture.payment == 1)?(
-                                
+
                                 <Button
                                 onPress={() => this.onPayPressed()}
                                 style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
-        
+
                                 <Text style={{flex: 1, paddingLeft: 10}}> Join </Text>
                                 {this.state.isApplying && (
                                     <ActivityIndicator size="small" color="#000000" />
                                 )}
-        
+
                                 <Icon type="Entypo" name="circle-with-plus" style={{color: Color.mainColor, fontSize: 25}}/>
-        
+
                                 </Button>
 
                             ):(
                                 (this.props.user.gender == this.state.lecture.gender || this.state.lecture.gender == 3)?
                                 (
-                                    (moment(Date()).format('YYYY-MM-DD hh:mm A') == moment(this.state.lecture.start_duration, 'YYYY-MM-DD hh:mm A').add(1, 'hours').format('YYYY-MM-DD hh:mm A'))
+                                    (moment( moment(Date()).format('YYYY-MM-DD[T]HH:mm[Z]') ).isAfter( moment(this.state.lecture.start_duration,'YYYY-MM-DD hh:mm A').format('YYYY-MM-DD[T]HH:mm[Z]')))
                                     ?null
                                     :(
                                         <Button
                                         onPress={()=> this.onRegisterPressed()}
                                         style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
-                
-                                        <Text style={{flex: 1, paddingLeft: 10}}> Join </Text>
+
+                                        <Text style={{flex: 1, paddingLeft: 10}}> Join  </Text>
                                         {this.state.isApplying && (
                                             <ActivityIndicator size="small" color="#000000" />
                                         )}
-                
+
                                         <Icon type="Entypo" name="circle-with-plus" style={{color: Color.mainColor, fontSize: 25}}/>
-                
-                                        </Button>                                    
+
+                                        </Button>
                                     )
-                                
+
                                 )
                                 :null
                             )
@@ -435,7 +436,7 @@ class Lectures extends Component {
                             <Text style={{flex: 1, color: '#000'}}> Settings </Text>
                             <Icon type="FontAwesome" name={this.state.isSetting? "arrow-circle-o-up": "arrow-circle-o-down"} style={{color: Color.mainColor, fontSize: 25}}/>
                             </Button>
-                            { 
+                            {
                                 (this.state.isSetting) && (
                                     <List style={{backgroundColor: "#d3d3ea", right: 0}}>
                                         {
@@ -448,13 +449,13 @@ class Lectures extends Component {
 
                                                             <Text style={{flex: 1, color: '#000'}}>Edit Lecture</Text>
                                                         </ListItem>
-                                                    
+
                                                     )
 
                                             ):null
-                                            
+
                                         }
-                                        
+
                                         <ListItem
                                             onPress={() => this.deleteLecture()}
                                         >
@@ -463,7 +464,7 @@ class Lectures extends Component {
                                     </List>
                                 )
                             }
-                            </View>   
+                            </View>
                     )
                 }
                 <View style={styles.content}>
@@ -494,7 +495,7 @@ class Lectures extends Component {
                                 <Text style={styles.priceText}>{this.state.lecture.price}</Text>
                                 <Text style={styles.priceIcon}>KWD</Text>
                             </Button>
-                            
+
                         </Item>
                         <Item style={styles.item2}>
                             <Icon type="Entypo" name="wallet" />
@@ -513,7 +514,7 @@ class Lectures extends Component {
                                 )
                             }
                             </View>
-                            
+
                         </Item>
 
                         <Item style={styles.item2}>
@@ -524,6 +525,7 @@ class Lectures extends Component {
                                 (this.state.lecture.type_course == 1) ? (
                                     <Text>
                                         College
+
                                     </Text>
 
                                 ):(
@@ -561,7 +563,7 @@ class Lectures extends Component {
                             <H3 style={styles.lectureTxt}>Date</H3>
                             <Text style={{position: 'absolute',left: 140,fontFamily: "Roboto",}}>
                             {this.state.lecture.start_date} To { this.state.lecture.end_date}
-                            </Text>                            
+                            </Text>
                         </Item>
 
                         <Item style={styles.item2}>
@@ -569,7 +571,7 @@ class Lectures extends Component {
                             <H3 style={styles.lectureTxt}>Duration</H3>
                             <Text style={{position: 'absolute',left: 160,fontFamily: "Roboto",}}>
                             {this.state.lecture.start_time} To {this.state.lecture.end_time}
-                            </Text>                            
+                            </Text>
                         </Item>
 
                         {/* <Item style={styles.item2}>
@@ -593,14 +595,14 @@ class Lectures extends Component {
                             <H3 style={styles.lectureTxt}>Description</H3>
                         </View>
                         <Text>
-                        {this.state.lecture.description}
+                        {this.state.lecture.description}{JSON.stringify(this.state.lecture) }
                         </Text>
 
                     </View>
 
                 <Text style={styles.commentTxt}>Comments</Text>
 
-                <View style={styles.BoxComment}>  
+                <View style={styles.BoxComment}>
                     <Card style={{borderWidth: 0}} transparent={true}>
 
                 <FlatList
@@ -665,15 +667,15 @@ class Lectures extends Component {
                                     //             <Icon type="FontAwesome" name="comment" style={{color: Color.mainColor, fontSize: 20}}/>
                                     //         </Button>
                                     //         </View>
-                                            
+
                                     //         </View>
                                     //     </View>
                                     //     </Modal>
                                     //     </View>
-                
+
                                     // ):null
                                 }
-                            </Right> 
+                            </Right>
                         </CardItem>
                         <CardItem style={{}}>
                             <Body>
@@ -686,7 +688,7 @@ class Lectures extends Component {
                         />
                         {
                             (this.props.user.type == 1)? (
-                                (_.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id && 
+                                (_.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id &&
                                     lecture.pivot.amount != 0))&&(
                                 <View>
                                 <CardItem>
@@ -726,7 +728,7 @@ class Lectures extends Component {
                         }
                     </Card>
                 </View>
-                
+
             </View>
 
             </AppTemplate>
@@ -741,28 +743,28 @@ const styles = StyleSheet.create({
         paddingTop: 0
     },
     Box: {
-        flex:1,  
+        flex:1,
         backgroundColor: '#fff',
         borderRadius: 5,
         padding: 30,
         paddingTop: 0,
     },
     BoxComment: {
-        flex:1,  
+        flex:1,
         backgroundColor: '#fff',
         borderRadius: 5,
-        padding: 5, 
+        padding: 5,
     },
     item:{
         height: 120,
     },
     item2:{
-        height: 70, 
+        height: 70,
     },
     image:{
-        width:80, 
-        height: 80, 
-        borderRadius: 10        
+        width:80,
+        height: 80,
+        borderRadius: 10
     },
     text:{
         paddingLeft: 60,
