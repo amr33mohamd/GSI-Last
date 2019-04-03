@@ -595,7 +595,7 @@ class Lectures extends Component {
                             <H3 style={styles.lectureTxt}>Description</H3>
                         </View>
                         <Text>
-                        {this.state.lecture.description}{JSON.stringify(this.state.lecture) }
+                        {this.state.lecture.description}
                         </Text>
 
                     </View>
