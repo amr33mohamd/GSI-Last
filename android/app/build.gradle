@@ -102,8 +102,13 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true
+<<<<<<< HEAD
         versionCode 7
         versionName "7.0"
+=======
+        versionCode 5
+        versionName "5.0"
+>>>>>>> 80500624c6cd94c14b51345691b1c9ac30798410
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
